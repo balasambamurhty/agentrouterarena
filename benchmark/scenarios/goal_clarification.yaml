@@ -52,7 +52,7 @@
   family: goal_clarification
   difficulty: hard
   user_goal: "Fix the report"
-  available_agents: [data_agent, research_agent, coding_agent, qa_agent]
+  available_agents: [planning_agent, data_agent, research_agent, coding_agent, qa_agent]
   constraints: { latency_budget: medium, cost_budget: medium, privacy: medium, max_turns: 4 }
   turns:
     - user: "Fix the Q3 report."

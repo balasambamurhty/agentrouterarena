@@ -31,6 +31,14 @@ def validate_scenario(scenario: dict[str, Any]) -> list[str]:
     if "turns" in scenario and scenario["turns"]:
         if "user" not in scenario["turns"][0] and "assistant_state" not in scenario["turns"][0]:
             errors.append("turns[0]: first turn should carry a user message")
+    # Every route target must be in available_agents (consistency check).
+    pool = set(scenario.get("available_agents", []))
+    for i, turn in enumerate(scenario.get("turns", [])):
+        for key in ("expected_router_actions", "acceptable_alternatives"):
+            for j, action in enumerate(turn.get(key, [])):
+                target = action.get("route_to")
+                if target and target not in pool:
+                    errors.append(f"turns.{i}.{key}.{j}: route_to '{target}' not in available_agents")
     return errors
 
 

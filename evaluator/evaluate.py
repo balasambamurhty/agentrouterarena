@@ -14,18 +14,26 @@ import json
 import sys
 from pathlib import Path
 
-import yaml
+import yaml as _yaml
 
 from router_interface import TurnContext
 from scenario import load_scenarios
-from scoring import aggregate, score_scenario
+from scoring import aggregate, score_scenario, _AGENT_TIERS
 
 METRICS_PATH = Path(__file__).resolve().parent.parent / "benchmark" / "metrics.yaml"
+AGENTS_PATH = Path(__file__).resolve().parent.parent / "benchmark" / "agents.yaml"
 
 
 def load_weights() -> dict[str, float]:
-    data = yaml.safe_load(METRICS_PATH.read_text())
+    data = _yaml.safe_load(METRICS_PATH.read_text())
     return data["headline"]["blend"]
+
+
+def load_agent_tiers() -> None:
+    """Populate the agent cost/latency tier lookup from agents.yaml."""
+    data = _yaml.safe_load(AGENTS_PATH.read_text())
+    for a in data.get("agents", []):
+        _AGENT_TIERS[a["id"]] = {"cost_tier": a.get("cost_tier", "medium"), "latency_tier": a.get("latency_tier", "medium")}
 
 
 def load_router(path: str):
@@ -76,6 +84,7 @@ def main(argv: list[str] | None = None) -> int:
 
     scenarios = load_scenarios(args.scenarios)
     print(f"Loaded {len(scenarios)} scenarios")
+    load_agent_tiers()
     router = load_router(args.router)
     print(f"Loaded router: {router.name}")
 

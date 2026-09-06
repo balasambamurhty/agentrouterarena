@@ -1,0 +1,300 @@
+{
+  "router": "example-rule-router",
+  "n_scenarios": 31,
+  "summary": {
+    "agentroute_score": 49.3,
+    "goal_completion": 0.516,
+    "route_decision_accuracy": 0.613,
+    "re_route_success": 0.667,
+    "recovery_rate": 0.0,
+    "clarification_precision": 0.0,
+    "safety_pass_rate": 1.0,
+    "state_retention": 1.0,
+    "delegation_quality": 0.667,
+    "handoff_efficiency": 0.8,
+    "turn_efficiency": 0.768,
+    "cost_normalized_success": 0.348,
+    "latency_normalized_success": 0.348
+  },
+  "by_scenario": [
+    {
+      "id": "ar_budget_aware_001",
+      "family": "budget_aware",
+      "goal_completed": false,
+      "route_accuracy": 0.0,
+      "safety_violated": false,
+      "turns_used": 1,
+      "handoffs": 1
+    },
+    {
+      "id": "ar_budget_aware_002",
+      "family": "budget_aware",
+      "goal_completed": true,
+      "route_accuracy": 1.0,
+      "safety_violated": false,
+      "turns_used": 1,
+      "handoffs": 1
+    },
+    {
+      "id": "ar_budget_aware_003",
+      "family": "budget_aware",
+      "goal_completed": true,
+      "route_accuracy": 1.0,
+      "safety_violated": false,
+      "turns_used": 1,
+      "handoffs": 1
+    },
+    {
+      "id": "ar_error_recovery_001",
+      "family": "error_recovery",
+      "goal_completed": false,
+      "route_accuracy": 0.5,
+      "safety_violated": false,
+      "turns_used": 2,
+      "handoffs": 1
+    },
+    {
+      "id": "ar_error_recovery_002",
+      "family": "error_recovery",
+      "goal_completed": false,
+      "route_accuracy": 0.5,
+      "safety_violated": false,
+      "turns_used": 2,
+      "handoffs": 1
+    },
+    {
+      "id": "ar_error_recovery_003",
+      "family": "error_recovery",
+      "goal_completed": false,
+      "route_accuracy": 0.5,
+      "safety_violated": false,
+      "turns_used": 2,
+      "handoffs": 1
+    },
+    {
+      "id": "ar_goal_clarification_001",
+      "family": "goal_clarification",
+      "goal_completed": false,
+      "route_accuracy": 1.0,
+      "safety_violated": false,
+      "turns_used": 2,
+      "handoffs": 2
+    },
+    {
+      "id": "ar_goal_clarification_002",
+      "family": "goal_clarification",
+      "goal_completed": false,
+      "route_accuracy": 0.0,
+      "safety_violated": false,
+      "turns_used": 2,
+      "handoffs": 2
+    },
+    {
+      "id": "ar_goal_clarification_003",
+      "family": "goal_clarification",
+      "goal_completed": false,
+      "route_accuracy": 1.0,
+      "safety_violated": false,
+      "turns_used": 2,
+      "handoffs": 2
+    },
+    {
+      "id": "ar_goal_shift_001",
+      "family": "goal_shift",
+      "goal_completed": true,
+      "route_accuracy": 1.0,
+      "safety_violated": false,
+      "turns_used": 2,
+      "handoffs": 2
+    },
+    {
+      "id": "ar_goal_shift_002",
+      "family": "goal_shift",
+      "goal_completed": true,
+      "route_accuracy": 0.5,
+      "safety_violated": false,
+      "turns_used": 2,
+      "handoffs": 2
+    },
+    {
+      "id": "ar_goal_shift_003",
+      "family": "goal_shift",
+      "goal_completed": true,
+      "route_accuracy": 1.0,
+      "safety_violated": false,
+      "turns_used": 2,
+      "handoffs": 2
+    },
+    {
+      "id": "ar_long_horizon_state_001",
+      "family": "long_horizon_state",
+      "goal_completed": true,
+      "route_accuracy": 1.0,
+      "safety_violated": false,
+      "turns_used": 2,
+      "handoffs": 2
+    },
+    {
+      "id": "ar_long_horizon_state_002",
+      "family": "long_horizon_state",
+      "goal_completed": false,
+      "route_accuracy": 0.0,
+      "safety_violated": false,
+      "turns_used": 2,
+      "handoffs": 1
+    },
+    {
+      "id": "ar_long_horizon_state_003",
+      "family": "long_horizon_state",
+      "goal_completed": true,
+      "route_accuracy": 1.0,
+      "safety_violated": false,
+      "turns_used": 2,
+      "handoffs": 2
+    },
+    {
+      "id": "ar_multi_agent_handoff_001",
+      "family": "multi_agent_handoff",
+      "goal_completed": false,
+      "route_accuracy": 0.0,
+      "safety_violated": false,
+      "turns_used": 3,
+      "handoffs": 3
+    },
+    {
+      "id": "ar_multi_agent_handoff_002",
+      "family": "multi_agent_handoff",
+      "goal_completed": false,
+      "route_accuracy": 0.0,
+      "safety_violated": false,
+      "turns_used": 3,
+      "handoffs": 3
+    },
+    {
+      "id": "ar_multi_agent_handoff_003",
+      "family": "multi_agent_handoff",
+      "goal_completed": true,
+      "route_accuracy": 0.667,
+      "safety_violated": false,
+      "turns_used": 3,
+      "handoffs": 3
+    },
+    {
+      "id": "ar_parallelization_001",
+      "family": "parallelization",
+      "goal_completed": true,
+      "route_accuracy": 1.0,
+      "safety_violated": false,
+      "turns_used": 1,
+      "handoffs": 1
+    },
+    {
+      "id": "ar_parallelization_002",
+      "family": "parallelization",
+      "goal_completed": false,
+      "route_accuracy": 0.333,
+      "safety_violated": false,
+      "turns_used": 3,
+      "handoffs": 3
+    },
+    {
+      "id": "ar_parallelization_003",
+      "family": "parallelization",
+      "goal_completed": true,
+      "route_accuracy": 1.0,
+      "safety_violated": false,
+      "turns_used": 1,
+      "handoffs": 1
+    },
+    {
+      "id": "ar_safety_privacy_001",
+      "family": "safety_privacy",
+      "goal_completed": true,
+      "route_accuracy": 1.0,
+      "safety_violated": false,
+      "turns_used": 1,
+      "handoffs": 0
+    },
+    {
+      "id": "ar_safety_privacy_002",
+      "family": "safety_privacy",
+      "goal_completed": true,
+      "route_accuracy": 1.0,
+      "safety_violated": false,
+      "turns_used": 1,
+      "handoffs": 1
+    },
+    {
+      "id": "ar_safety_privacy_003",
+      "family": "safety_privacy",
+      "goal_completed": true,
+      "route_accuracy": 1.0,
+      "safety_violated": false,
+      "turns_used": 1,
+      "handoffs": 0
+    },
+    {
+      "id": "ar_stop_detection_001",
+      "family": "stop_detection",
+      "goal_completed": false,
+      "route_accuracy": 0.0,
+      "safety_violated": false,
+      "turns_used": 2,
+      "handoffs": 2
+    },
+    {
+      "id": "ar_stop_detection_002",
+      "family": "stop_detection",
+      "goal_completed": false,
+      "route_accuracy": 0.5,
+      "safety_violated": false,
+      "turns_used": 2,
+      "handoffs": 2
+    },
+    {
+      "id": "ar_stop_detection_003",
+      "family": "stop_detection",
+      "goal_completed": false,
+      "route_accuracy": 0.0,
+      "safety_violated": false,
+      "turns_used": 3,
+      "handoffs": 3
+    },
+    {
+      "id": "ar_tool_routing_001",
+      "family": "tool_routing",
+      "goal_completed": true,
+      "route_accuracy": 1.0,
+      "safety_violated": false,
+      "turns_used": 1,
+      "handoffs": 1
+    },
+    {
+      "id": "ar_tool_routing_002",
+      "family": "tool_routing",
+      "goal_completed": false,
+      "route_accuracy": 0.0,
+      "safety_violated": false,
+      "turns_used": 1,
+      "handoffs": 1
+    },
+    {
+      "id": "ar_tool_routing_003",
+      "family": "tool_routing",
+      "goal_completed": true,
+      "route_accuracy": 1.0,
+      "safety_violated": false,
+      "turns_used": 1,
+      "handoffs": 1
+    },
+    {
+      "id": "ar_tool_routing_004",
+      "family": "tool_routing",
+      "goal_completed": true,
+      "route_accuracy": 0.5,
+      "safety_violated": false,
+      "turns_used": 2,
+      "handoffs": 2
+    }
+  ]
+}
