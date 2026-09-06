@@ -1,0 +1,61 @@
+# Family: Parallelization vs Sequencing
+# Decide whether subtasks can run independently or require prior outputs.
+
+- id: ar_parallelization_001
+  family: parallelization
+  difficulty: medium
+  user_goal: "Research 3 unrelated competitors"
+  available_agents: [research_agent, planning_agent, coding_agent, data_agent]
+  constraints: { latency_budget: medium, cost_budget: medium, privacy: low }
+  turns:
+    - user: "Research competitors A, B, and C — they're independent."
+      expected_router_actions:
+        - route_to: research_agent
+          action: split
+          reason: "Independent subtasks can be parallelized."
+      acceptable_alternatives:
+        - route_to: planning_agent
+          action: split
+          reason: "Planning can fan out independent research."
+  success_criteria:
+    - "Recognizes independence and parallelizes rather than serializing"
+  routing_failures: [over_serialization, no_decomposition]
+
+- id: ar_parallelization_002
+  family: parallelization
+  difficulty: hard
+  user_goal: "Fetch data, then transform it, then report"
+  available_agents: [data_agent, coding_agent, research_agent, planning_agent]
+  constraints: { latency_budget: high, cost_budget: high, privacy: low }
+  turns:
+    - user: "Fetch the dataset, transform it, then write the report."
+      expected_router_actions:
+        - route_to: data_agent
+          reason: "Fetch must precede transform and report."
+    - assistant_state: "Dataset fetched."
+      expected_router_actions:
+        - route_to: coding_agent
+          reason: "Transform depends on fetched data."
+    - assistant_state: "Transform complete."
+      expected_router_actions:
+        - route_to: research_agent
+          reason: "Report depends on transformed data."
+  success_criteria:
+    - "Serializes the dependent chain rather than parallelizing"
+  routing_failures: [over_parallelization, wrong_order]
+
+- id: ar_parallelization_003
+  family: parallelization
+  difficulty: medium
+  user_goal: "Draft two independent emails"
+  available_agents: [email_agent, planning_agent, research_agent]
+  constraints: { latency_budget: low, cost_budget: low, privacy: low }
+  turns:
+    - user: "Draft a tenant notice and a vendor thank-you at once."
+      expected_router_actions:
+        - route_to: email_agent
+          action: split
+          reason: "Two independent drafts can be parallelized."
+  success_criteria:
+    - "Parallelizes the two independent drafts"
+  routing_failures: [over_serialization]

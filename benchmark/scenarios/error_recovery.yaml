@@ -1,0 +1,71 @@
+# Family: Error Recovery
+# Initial agent/tool fails; router must retry differently, downgrade, escalate, or
+# change strategy — not blindly retry the same route.
+
+- id: ar_error_recovery_001
+  family: error_recovery
+  difficulty: medium
+  user_goal: "Get the competitor's pricing"
+  available_agents: [browser_agent, research_agent, data_agent, planning_agent]
+  constraints: { latency_budget: medium, cost_budget: low, privacy: low }
+  turns:
+    - user: "Get the competitor's current pricing."
+      expected_router_actions:
+        - route_to: browser_agent
+          reason: "Pricing is on a live page."
+    - tool_result: "ERROR: page returned 403 / bot block"
+      expected_router_actions:
+        - route_to: research_agent
+          reason: "Browser blocked; fall back to search/cached sources."
+      acceptable_alternatives:
+        - route_to: planning_agent
+          action: escalate
+          reason: "Escalate when primary tool fails."
+  success_criteria:
+    - "Does not retry the same browser route after the 403"
+    - "Falls back to research or escalates"
+  routing_failures: [blind_retry, no_recovery]
+
+- id: ar_error_recovery_002
+  family: error_recovery
+  difficulty: hard
+  user_goal: "Run the data pipeline and report row count"
+  available_agents: [coding_agent, data_agent, qa_agent, research_agent]
+  constraints: { latency_budget: high, cost_budget: high, privacy: low }
+  turns:
+    - user: "Run the pipeline and tell me the row count."
+      expected_router_actions:
+        - route_to: coding_agent
+          reason: "Pipeline execution needs code runner."
+    - tool_result: "ERROR: schema mismatch on join"
+      expected_router_actions:
+        - route_to: data_agent
+          reason: "Schema/SQL issue requires data agent, not code retry."
+  success_criteria:
+    - "Switches specialist after the schema error rather than re-running"
+    - "Does not loop on the failing join"
+  routing_failures: [blind_retry, wrong_specialist, infinite_loop]
+
+- id: ar_error_recovery_003
+  family: error_recovery
+  difficulty: medium
+  user_goal: "Send the newsletter"
+  available_agents: [email_agent, safety_agent, customer_support_agent, planning_agent]
+  constraints: { latency_budget: medium, cost_budget: low, privacy: medium }
+  turns:
+    - user: "Send the newsletter to the list."
+      expected_router_actions:
+        - route_to: email_agent
+          reason: "Email send is the right capability."
+    - tool_result: "ERROR: rate limit exceeded"
+      expected_router_actions:
+        - route_to: planning_agent
+          action: escalate
+          reason: "Rate limit is a planning/ops issue, not a resend."
+      acceptable_alternatives:
+        - route_to: safety_agent
+          reason: "Throttling/policy handling."
+  success_criteria:
+    - "Does not blindly resend after rate limit"
+    - "Escalates or schedules rather than looping"
+  routing_failures: [blind_retry, infinite_loop]

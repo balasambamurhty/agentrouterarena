@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Benchmark — AgentRoute Arena</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='6' cy='8' r='3' fill='%2322d3ee'/><circle cx='26' cy='8' r='3' fill='%23818cf8'/><circle cx='16' cy='24' r='3' fill='%2322d3ee'/><path d='M9 8 L23 8 M16 11 L16 21' stroke='%23818cf8' stroke-width='2' fill='none'/></svg>">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="8" r="2.5"/><circle cx="26" cy="8" r="2.5"/><circle cx="16" cy="24" r="2.5"/><path d="M8.5 8 L23.5 8"/><path d="M16 21.5 L16 13.5"/><path d="M14 15 L16 13.5 L18 15"/></svg><span class="name">AgentRoute<b>.</b>Arena</span></a>
+    <nav class="nav">
+      <a href="leaderboard.html">Leaderboard</a>
+      <a href="benchmark.html">Benchmark</a>
+      <a href="metrics.html">Metrics</a>
+      <a href="submit.html" class="cta">Submit a router</a>
+      <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg></button>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page-head container">
+  <span class="eyebrow">● THE BENCHMARK</span>
+  <h1>The benchmark</h1>
+  <p>The unit is a <strong>trajectory</strong>, not a prompt. 10 task families, 31 seed scenarios. Each scenario encodes an evolving goal, injected world state, a capability pool, constraints, an allowed route set, and named failure modes.</p>
+</section>
+
+<section class="container">
+  <div class="grid grid-3">
+    <div class="card"><span class="k">shape</span><h3>Multi-turn trajectory</h3><p>2–4 turns with evolving goal and injected state per scenario.</p></div>
+    <div class="card"><span class="k">oracle</span><h3>Allowed route sets</h3><p>Each turn lists expected routes <em>and</em> acceptable alternatives.</p></div>
+    <div class="card"><span class="k">failure</span><h3>Named failure modes</h3><p>Every scenario targets specific routing failures.</p></div>
+    <div class="card"><span class="k">families</span><h3>10 task families</h3><p>From goal clarification to stop detection.</p></div>
+    <div class="card"><span class="k">schema</span><h3>JSON Schema validated</h3><p>Every scenario validated on load.</p></div>
+    <div class="card"><span class="k">deterministic</span><h3>Reproducible scoring</h3><p>No LLM judge required in v0.1.</p></div>
+  </div>
+</section>
+
+<section class="container">
+  <div class="section-head"><span class="num">— SAMPLE SCENARIO</span><h2>A goal-shift scenario, end to end</h2><p>From <code>benchmark/scenarios/goal_shift.yaml</code>. The user changes objective mid-task; the router must re-plan rather than continue the original route.</p></div>
+<pre class="code"><span class="c"># benchmark/scenarios/goal_shift.yaml</span>
+<span class="ky">- id:</span> <span class="s">ar_goal_shift_001</span>
+  <span class="ky">family:</span> <span class="s">goal_shift</span>
+  <span class="ky">difficulty:</span> <span class="s">medium</span>
+  <span class="ky">user_goal:</span> <span class="s">"Plan a weekend hiking trip near Palo Alto"</span>
+  <span class="ky">available_agents:</span> <span class="s">[research_agent, planning_agent, calendar_agent, safety_agent]</span>
+  <span class="ky">constraints:</span> <span class="s">{ latency_budget: medium, cost_budget: medium, privacy: low }</span>
+
+  <span class="ky">turns:</span>
+    <span class="c">- user:</span> <span class="s">"Find a challenging hike near Palo Alto for Saturday."</span>
+      <span class="c">expected_router_actions:</span>
+        <span class="c">- route_to:</span> <span class="s">research_agent</span>
+          <span class="c">reason:</span> <span class="s">"Needs location-based options for strenuous hikes."</span>
+      <span class="c">acceptable_alternatives:</span>
+        <span class="c">- route_to:</span> <span class="s">planning_agent</span>
+          <span class="c">reason:</span> <span class="s">"Planning can scope the search parameters."</span>
+
+    <span class="c">- assistant_state:</span> <span class="s">"Found Mission Peak and Black Mountain."</span>   <span class="c"># injected world state</span>
+      <span class="c">user:</span> <span class="s">"Actually make it family-friendly and include lunch nearby."</span>
+      <span class="c">expected_router_actions:</span>
+        <span class="c">- route_to:</span> <span class="s">planning_agent</span>
+          <span class="c">reason:</span> <span class="s">"Goal changed from challenging hike to family outing."</span>
+
+  <span class="ky">success_criteria:</span>
+    <span class="s">- "Acknowledges the changed goal rather than continuing the strenuous-hike route"</span>
+    <span class="s">- "Produces a family-friendly plan with a lunch option"</span>
+
+  <span class="ky">routing_failures:</span> <span class="s">[stale_goal_continuation, wrong_specialist]</span>
+</pre>
+</section>
+
+<section class="container">
+  <div class="section-head"><span class="num">— ALL FAMILIES</span><h2>What each family stresses</h2></div>
+  <div class="grid grid-3">
+    <div class="card"><span class="k">goal_clarification</span><h3>Ask when needed</h3><p>Don't prematurely delegate; don't over-clarify.</p><div class="meta"><span class="tag-chip">premature_delegation</span><span class="tag-chip">over_clarification</span></div></div>
+    <div class="card"><span class="k">goal_shift</span><h3>Re-plan on change</h3><p>The defining difference vs single-turn routing.</p><div class="meta"><span class="tag-chip">stale_goal_continuation</span></div></div>
+    <div class="card"><span class="k">tool_routing</span><h3>Route by capability</h3><p>Browser, code, calendar, DB, email…</p><div class="meta"><span class="tag-chip">wrong_specialist</span></div></div>
+    <div class="card"><span class="k">multi_agent_handoff</span><h3>Sequence specialists</h3><p>research → build → validate.</p><div class="meta"><span class="tag-chip">wrong_order</span></div></div>
+    <div class="card"><span class="k">error_recovery</span><h3>Recover from failure</h3><p>Retry differently, downgrade, escalate.</p><div class="meta"><span class="tag-chip">blind_retry</span><span class="tag-chip">infinite_loop</span></div></div>
+    <div class="card"><span class="k">budget_aware</span><h3>Cheap-first</h3><p>Premium only when risk/complexity demands.</p><div class="meta"><span class="tag-chip">over_provision</span></div></div>
+    <div class="card"><span class="k">safety_privacy</span><h3>Trust boundaries</h3><p>Detect PII / destructive crossings.</p><div class="meta"><span class="tag-chip">safety_violation</span></div></div>
+    <div class="card"><span class="k">long_horizon_state</span><h3>Honor early constraints</h3><p>State retention across many turns.</p><div class="meta"><span class="tag-chip">state_loss</span></div></div>
+    <div class="card"><span class="k">parallelization</span><h3>Parallel vs sequential</h3><p>Independent vs dependent subtasks.</p><div class="meta"><span class="tag-chip">over_serialize</span></div></div>
+    <div class="card"><span class="k">stop_detection</span><h3>Know when done</h3><p>Avoid unnecessary extra steps.</p><div class="meta"><span class="tag-chip">over_routing</span></div></div>
+  </div>
+</section>
+
+<section class="container">
+  <div class="section-head"><span class="num">— FILES</span><h2>Where things live</h2></div>
+<pre class="code"><span class="k">benchmark/</span>
+<span class="c">├── schema/scenario.schema.json</span>   <span class="c"># JSON Schema for a scenario</span>
+<span class="c">├── scenarios/</span>                     <span class="c"># 10 families, 31 seed scenarios</span>
+<span class="c">├── agents.yaml</span>                    <span class="c"># reference agent/tool pool</span>
+<span class="c">└── metrics.yaml</span>                   <span class="c"># metric definitions + weights</span>
+</pre>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="inner"><span class="muted">AgentRoute Arena · an open benchmark for agentic routing · MIT License</span><div style="display:flex;gap:var(--space-5)"><a href="https://github.com/agentroute/agentroute-arena">GitHub</a><a href="benchmark.html">Benchmark</a><a href="about.html">About</a></div></div>
+</footer>
+<script src="app.js"></script>
+</body>
+</html>

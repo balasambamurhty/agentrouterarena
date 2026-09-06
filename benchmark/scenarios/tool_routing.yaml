@@ -1,0 +1,74 @@
+# Family: Tool / Capability Routing
+# Route based on which tool/capability is required, not which model is smartest.
+
+- id: ar_tool_routing_001
+  family: tool_routing
+  difficulty: easy
+  user_goal: "What were last quarter's support ticket volumes by category?"
+  available_agents: [research_agent, data_agent, coding_agent, browser_agent]
+  constraints: { latency_budget: medium, cost_budget: medium, privacy: medium }
+  turns:
+    - user: "What were last quarter's support ticket volumes by category?"
+      expected_router_actions:
+        - route_to: data_agent
+          reason: "Requires SQL over the support DB, not web search."
+  success_criteria:
+    - "Routes to a data/SQL-capable agent, not a research agent"
+  routing_failures: [wrong_specialist]
+
+- id: ar_tool_routing_002
+  family: tool_routing
+  difficulty: medium
+  user_goal: "Check whether the pricing page still says 'free trial'"
+  available_agents: [research_agent, browser_agent, coding_agent, data_agent]
+  constraints: { latency_budget: medium, cost_budget: low, privacy: low }
+  turns:
+    - user: "Check whether our pricing page still says 'free trial'."
+      expected_router_actions:
+        - route_to: browser_agent
+          reason: "Requires reading a live web page."
+  success_criteria:
+    - "Routes to a browser-capable agent"
+  routing_failures: [wrong_specialist]
+
+- id: ar_tool_routing_003
+  family: tool_routing
+  difficulty: medium
+  user_goal: "Block off next Tuesday and send the agenda to attendees"
+  available_agents: [calendar_agent, email_agent, planning_agent, browser_agent]
+  constraints: { latency_budget: low, cost_budget: low, privacy: low }
+  turns:
+    - user: "Block off next Tuesday 2-4pm and email the agenda to attendees."
+      expected_router_actions:
+        - route_to: calendar_agent
+          action: split
+          reason: "Two capabilities needed; calendar first then email."
+      acceptable_alternatives:
+        - route_to: planning_agent
+          action: split
+          reason: "Planning orchestrates the two-step sequence."
+  success_criteria:
+    - "Recognizes two distinct capabilities (calendar + email)"
+    - "Does not route to a single agent lacking both capabilities"
+  routing_failures: [wrong_specialist, no_decomposition]
+
+- id: ar_tool_routing_004
+  family: tool_routing
+  difficulty: hard
+  user_goal: "Run the model, then chart the results"
+  available_agents: [coding_agent, data_agent, browser_agent, research_agent]
+  constraints: { latency_budget: high, cost_budget: high, privacy: low }
+  turns:
+    - user: "Run the forecasting model on sales.csv and chart the output."
+      expected_router_actions:
+        - route_to: coding_agent
+          reason: "Requires code execution to run the model."
+    - assistant_state: "Model produced results.csv."
+      tool_result: "results.csv generated"
+      expected_router_actions:
+        - route_to: data_agent
+          reason: "Charting is a data-viz task, not model execution."
+  success_criteria:
+    - "Routes execution to coding_agent and charting to data_agent"
+    - "Sequences execution before charting"
+  routing_failures: [wrong_specialist, no_decomposition]

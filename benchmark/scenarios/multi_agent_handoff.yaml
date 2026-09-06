@@ -1,0 +1,80 @@
+# Family: Multi-Agent Handoff
+# Correct sequencing across specialists. research -> build -> validate, etc.
+
+- id: ar_multi_agent_handoff_001
+  family: multi_agent_handoff
+  difficulty: medium
+  user_goal: "Research competitors, then build a comparison page, then QA it"
+  available_agents: [research_agent, coding_agent, qa_agent, planning_agent]
+  constraints: { latency_budget: high, cost_budget: high, privacy: low }
+  turns:
+    - user: "Research 3 competitors, build a comparison page, then QA it."
+      expected_router_actions:
+        - route_to: research_agent
+          reason: "Research must precede build."
+    - assistant_state: "Competitor research complete with 3 profiles."
+      expected_router_actions:
+        - route_to: coding_agent
+          reason: "Build depends on research output."
+    - assistant_state: "Comparison page built."
+      expected_router_actions:
+        - route_to: qa_agent
+          reason: "Validation is the final step."
+  success_criteria:
+    - "Orders research -> build -> QA correctly"
+    - "Does not start build before research completes"
+  routing_failures: [wrong_order, premature_handoff]
+
+- id: ar_multi_agent_handoff_002
+  family: multi_agent_handoff
+  difficulty: hard
+  user_goal: "Investigate a billing complaint end-to-end"
+  available_agents: [customer_support_agent, data_agent, research_agent, safety_agent, email_agent]
+  constraints: { latency_budget: medium, cost_budget: medium, privacy: high }
+  turns:
+    - user: "Customer says they were double-charged. Investigate and reply."
+      expected_router_actions:
+        - route_to: data_agent
+          reason: "Verify the charge against ledger first."
+    - assistant_state: "Confirmed duplicate charge in billing DB."
+      expected_router_actions:
+        - route_to: safety_agent
+          reason: "Refund/PII handling requires confirmation."
+      acceptable_alternatives:
+        - route_to: customer_support_agent
+          reason: "Support owns refund workflow."
+    - assistant_state: "Refund approved and processed."
+      expected_router_actions:
+        - route_to: email_agent
+          reason: "Reply to the customer with resolution."
+  success_criteria:
+    - "Verifies via data_agent before communicating"
+    - "Routes sensitive refund step through safety/support"
+    - "Closes loop with customer email"
+  routing_failures: [wrong_order, premature_handoff, safety_violation]
+
+- id: ar_multi_agent_handoff_003
+  family: multi_agent_handoff
+  difficulty: medium
+  user_goal: "Analyze churn, write a summary, schedule a review"
+  available_agents: [data_agent, research_agent, email_agent, calendar_agent, planning_agent]
+  constraints: { latency_budget: medium, cost_budget: medium, privacy: medium }
+  turns:
+    - user: "Analyze last month's churn, summarize it, and set up a review meeting."
+      expected_router_actions:
+        - route_to: data_agent
+          reason: "Churn analysis requires the data warehouse."
+    - assistant_state: "Churn analysis complete."
+      expected_router_actions:
+        - route_to: planning_agent
+          reason: "Synthesize the summary from analysis."
+      acceptable_alternatives:
+        - route_to: research_agent
+          reason: "Narrative synthesis also valid."
+    - assistant_state: "Summary written."
+      expected_router_actions:
+        - route_to: calendar_agent
+          reason: "Final step is scheduling."
+  success_criteria:
+    - "Sequences analysis -> summary -> scheduling"
+  routing_failures: [wrong_order, premature_handoff]

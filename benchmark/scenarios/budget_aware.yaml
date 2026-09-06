@@ -1,0 +1,53 @@
+# Family: Budget / Latency-Aware Routing
+# Cheap/fast first unless high-risk or high-complexity criteria trigger premium routing.
+
+- id: ar_budget_aware_001
+  family: budget_aware
+  difficulty: medium
+  user_goal: "Summarize this meeting transcript"
+  available_agents: [research_agent, domain_expert_agent, coding_agent, planning_agent]
+  constraints: { latency_budget: low, cost_budget: low, privacy: medium }
+  turns:
+    - user: "Summarize this 2-page meeting transcript."
+      expected_router_actions:
+        - route_to: research_agent
+          reason: "Routine summarization; cheap agent suffices."
+  success_criteria:
+    - "Routes to a low-cost agent, not the premium domain expert"
+  routing_failures: [over_provisioning]
+
+- id: ar_budget_aware_002
+  family: budget_aware
+  difficulty: hard
+  user_goal: "Review a contract for IP assignment risk"
+  available_agents: [research_agent, domain_expert_agent, safety_agent, planning_agent]
+  constraints: { latency_budget: high, cost_budget: high, privacy: high, risk: high }
+  turns:
+    - user: "Review this contract for IP assignment risk."
+      expected_router_actions:
+        - route_to: domain_expert_agent
+          reason: "High-risk legal task justifies premium specialist."
+      acceptable_alternatives:
+        - route_to: safety_agent
+          reason: "Risk/legal boundary handling is also valid."
+  success_criteria:
+    - "Escalates to premium/specialist despite higher cost, due to high risk"
+  routing_failures: [under_provisioning, safety_violation]
+
+- id: ar_budget_aware_003
+  family: budget_aware
+  difficulty: medium
+  user_goal: "Draft a quick status update"
+  available_agents: [email_agent, planning_agent, domain_expert_agent, research_agent]
+  constraints: { latency_budget: low, cost_budget: low, privacy: low }
+  turns:
+    - user: "Draft a quick status update for the team."
+      expected_router_actions:
+        - route_to: email_agent
+          reason: "Low-cost drafting agent fits a simple update."
+      acceptable_alternatives:
+        - route_to: planning_agent
+          reason: "Planning can also draft."
+  success_criteria:
+    - "Avoids the premium domain expert for a low-stakes draft"
+  routing_failures: [over_provisioning]

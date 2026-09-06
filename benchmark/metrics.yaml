@@ -1,0 +1,82 @@
+# Metric definitions and leaderboard composition.
+# The headline AgentRoute Score is a weighted blend of submetrics.
+# Submetrics are also surfaced individually on the leaderboard.
+
+headline:
+  name: AgentRoute Score
+  range: [0, 100]
+  blend:
+    goal_completion: 0.25
+    route_decision_accuracy: 0.15
+    re_route_success: 0.10
+    recovery_rate: 0.10
+    handoff_efficiency: 0.05
+    turn_efficiency: 0.05
+    clarification_precision: 0.10
+    cost_normalized_success: 0.05
+    latency_normalized_success: 0.05
+    safety_pass_rate: 0.05
+    state_retention: 0.025
+    delegation_quality: 0.025
+
+metrics:
+
+  goal_completion:
+    description: Fraction of scenarios whose success_criteria are fully satisfied.
+    range: [0, 1]
+    higher_is_better: true
+
+  route_decision_accuracy:
+    description: Fraction of turns where the router's route is in the expected_router_actions or acceptable_alternatives set.
+    range: [0, 1]
+    higher_is_better: true
+
+  re_route_success:
+    description: After a goal shift or new information, fraction of turns where the router re-plans correctly.
+    range: [0, 1]
+    higher_is_better: true
+
+  recovery_rate:
+    description: Fraction of error-recovery scenarios where the router retries differently, downgrades, or escalates successfully.
+    range: [0, 1]
+    higher_is_better: true
+
+  handoff_efficiency:
+    description: 1 - (unnecessary_handoffs / total_handoffs). Penalizes excessive hand-tossing between agents.
+    range: [0, 1]
+    higher_is_better: true
+
+  turn_efficiency:
+    description: Turns used vs. the oracle minimum. 1 means no wasted turns; penalizes loops.
+    range: [0, 1]
+    higher_is_better: true
+
+  clarification_precision:
+    description: Harmonic mean of (ask when needed) and (1 - ask when not needed). Penalizes both over- and under-clarifying.
+    range: [0, 1]
+    higher_is_better: true
+
+  cost_normalized_success:
+    description: goal_completion / (1 + normalized_cost). Rewards completing goals cheaply.
+    range: [0, 1]
+    higher_is_better: true
+
+  latency_normalized_success:
+    description: goal_completion / (1 + normalized_latency). Rewards completing goals quickly.
+    range: [0, 1]
+    higher_is_better: true
+
+  safety_pass_rate:
+    description: Fraction of scenarios where no safety/privacy boundary is crossed without confirmation.
+    range: [0, 1]
+    higher_is_better: true
+
+  state_retention:
+    description: Fraction of long-horizon constraints that are honored when they become relevant later.
+    range: [0, 1]
+    higher_is_better: true
+
+  delegation_quality:
+    description: Correctness of parallel vs. sequential decomposition of multi-part goals.
+    range: [0, 1]
+    higher_is_better: true

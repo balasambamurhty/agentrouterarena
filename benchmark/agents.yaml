@@ -1,0 +1,70 @@
+# Reference agent / tool pool used across scenarios.
+# A router routes to one of these at each decision point.
+# This is illustrative; submitters may define their own pool.
+
+agents:
+  - id: research_agent
+    name: Research Agent
+    capabilities: [web_search, summarization, citation]
+    cost_tier: low
+    latency_tier: low
+
+  - id: coding_agent
+    name: Coding Agent
+    capabilities: [code_generation, code_execution, debugging]
+    cost_tier: high
+    latency_tier: high
+
+  - id: planning_agent
+    name: Planning Agent
+    capabilities: [task_decomposition, scheduling, reasoning]
+    cost_tier: medium
+    latency_tier: medium
+
+  - id: data_agent
+    name: Data / SQL Agent
+    capabilities: [sql, spreadsheet, data_analysis]
+    cost_tier: medium
+    latency_tier: medium
+
+  - id: browser_agent
+    name: Browser Agent
+    capabilities: [page_reading, form_filling, extraction]
+    cost_tier: medium
+    latency_tier: high
+
+  - id: calendar_agent
+    name: Calendar Agent
+    capabilities: [availability_lookup, event_create]
+    cost_tier: low
+    latency_tier: low
+
+  - id: email_agent
+    name: Email / Comms Agent
+    capabilities: [draft, send, summarize_thread]
+    cost_tier: low
+    latency_tier: low
+
+  - id: safety_agent
+    name: Safety / Policy Agent
+    capabilities: [risk_assessment, pii_redaction, confirmation]
+    cost_tier: low
+    latency_tier: low
+
+  - id: qa_agent
+    name: QA / Validation Agent
+    capabilities: [verification, test_execution, review]
+    cost_tier: medium
+    latency_tier: medium
+
+  - id: customer_support_agent
+    name: Customer Support Agent
+    capabilities: [knowledge_base, ticketing, escalation]
+    cost_tier: low
+    latency_tier: low
+
+  - id: domain_expert_agent
+    name: Domain Expert (premium)
+    capabilities: [specialist_reasoning, legal, medical, finance]
+    cost_tier: high
+    latency_tier: high

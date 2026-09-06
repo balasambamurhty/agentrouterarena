@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# Eval outputs
+results.json
+**/results.json
+
+# OS
+.DS_Store
+Thumbs.db

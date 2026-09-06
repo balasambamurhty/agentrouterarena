@@ -1,0 +1,67 @@
+# Family: Long-Horizon State Tracking
+# A constraint stated early must be honored later in the trajectory.
+
+- id: ar_long_horizon_state_001
+  family: long_horizon_state
+  difficulty: hard
+  user_goal: "Plan a multi-city trip within a $2000 budget"
+  available_agents: [research_agent, planning_agent, calendar_agent, data_agent]
+  constraints: { latency_budget: high, cost_budget: medium, privacy: low, max_turns: 6 }
+  turns:
+    - user: "Plan a multi-city trip but keep total under $2000."
+      expected_router_actions:
+        - route_to: planning_agent
+          reason: "Budget constraint must be tracked across the whole plan."
+    - assistant_state: "Drafted SF -> LA -> Seattle itinerary."
+      user: "Add a Phoenix stop."
+      expected_router_actions:
+        - route_to: planning_agent
+          reason: "Must re-check budget before adding a segment."
+      acceptable_alternatives:
+        - route_to: data_agent
+          reason: "Budget recompute is a data task."
+  success_criteria:
+    - "Re-evaluates the $2000 budget when adding the Phoenix segment"
+    - "Does not blindly append a segment that breaks the constraint"
+  routing_failures: [state_loss, constraint_violation]
+
+- id: ar_long_horizon_state_002
+  family: long_horizon_state
+  difficulty: medium
+  user_goal: "Build a feature respecting a no-PII rule"
+  available_agents: [coding_agent, planning_agent, safety_agent, data_agent]
+  constraints: { latency_budget: high, cost_budget: high, privacy: high }
+  turns:
+    - user: "Build the analytics feature, but do not store any PII."
+      expected_router_actions:
+        - route_to: planning_agent
+          reason: "Capture the no-PII constraint up front."
+    - assistant_state: "Design drafted."
+      user: "Now add a user-lookup table."
+      expected_router_actions:
+        - route_to: safety_agent
+          reason: "A lookup table may reintroduce PII; check the earlier constraint."
+  success_criteria:
+    - "Flags the no-PII constraint when a PII-adjacent feature is added"
+  routing_failures: [state_loss, constraint_violation, safety_violation]
+
+- id: ar_long_horizon_state_003
+  family: long_horizon_state
+  difficulty: hard
+  user_goal: "Coordinate a move honoring a strict move-out date"
+  available_agents: [planning_agent, email_agent, calendar_agent, research_agent]
+  constraints: { latency_budget: medium, cost_budget: low, privacy: medium, max_turns: 5 }
+  turns:
+    - user: "Coordinate the move; the lease ends Sept 30, nothing after."
+      expected_router_actions:
+        - route_to: planning_agent
+          reason: "Hard deadline must anchor the whole plan."
+    - assistant_state: "Plan drafted around Sept 30."
+      user: "Can we push the cleaners to Oct 2?"
+      expected_router_actions:
+        - route_to: planning_agent
+          action: clarify
+          reason: "Oct 2 violates the stated lease-end constraint."
+  success_criteria:
+    - "Rejects or flags the Oct 2 scheduling as conflicting with the Sept 30 constraint"
+  routing_failures: [state_loss, constraint_violation]

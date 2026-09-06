@@ -1,0 +1,75 @@
+# Family: Goal Shift
+# The user changes objective mid-task. The router must re-plan, not continue the
+# original route. This is the defining difference vs. single-turn routing.
+
+- id: ar_goal_shift_001
+  family: goal_shift
+  difficulty: medium
+  user_goal: "Plan a weekend hiking trip near Palo Alto"
+  available_agents: [research_agent, planning_agent, calendar_agent, safety_agent]
+  constraints: { latency_budget: medium, cost_budget: medium, privacy: low }
+  turns:
+    - user: "Find a challenging hike near Palo Alto for Saturday."
+      expected_router_actions:
+        - route_to: research_agent
+          reason: "Needs location-based options for strenuous hikes."
+      acceptable_alternatives:
+        - route_to: planning_agent
+          reason: "Planning can scope the search parameters."
+    - assistant_state: "Found Mission Peak and Black Mountain as challenging options."
+      user: "Actually make it family-friendly and include lunch nearby."
+      expected_router_actions:
+        - route_to: planning_agent
+          reason: "Goal changed from challenging hike to family outing."
+      acceptable_alternatives:
+        - route_to: research_agent
+          reason: "Re-research for family-friendly options is also valid."
+  success_criteria:
+    - "Acknowledges the changed goal rather than continuing strenuous-hike route"
+    - "Produces a family-friendly plan with a lunch option"
+  routing_failures: [stale_goal_continuation, wrong_specialist]
+
+- id: ar_goal_shift_002
+  family: goal_shift
+  difficulty: hard
+  user_goal: "Draft a product launch announcement"
+  available_agents: [planning_agent, email_agent, research_agent, domain_expert_agent, safety_agent]
+  constraints: { latency_budget: medium, cost_budget: medium, privacy: medium }
+  turns:
+    - user: "Draft a launch announcement for our new analytics feature."
+      expected_router_actions:
+        - route_to: planning_agent
+          reason: "Outline structure before drafting."
+    - assistant_state: "Outline drafted."
+      user: "Actually we need a competitive teardown instead — legal just flagged a competitor claim."
+      expected_router_actions:
+        - route_to: research_agent
+          reason: "Goal pivoted to competitive/claim analysis."
+      acceptable_alternatives:
+        - route_to: domain_expert_agent
+          reason: "Legal-flavored claim analysis is specialist work."
+  success_criteria:
+    - "Abandons the announcement outline rather than finishing it"
+    - "Routes to research/legal analysis for the new objective"
+  routing_failures: [stale_goal_continuation, wrong_specialist]
+
+- id: ar_goal_shift_003
+  family: goal_shift
+  difficulty: medium
+  user_goal: "Book a sailing charter"
+  available_agents: [research_agent, calendar_agent, browser_agent, email_agent]
+  constraints: { latency_budget: medium, cost_budget: low, privacy: low }
+  turns:
+    - user: "Find a sunset sail charter near me for next weekend."
+      expected_router_actions:
+        - route_to: research_agent
+          reason: "Needs local charter options."
+    - assistant_state: "Found 3 charter options."
+      user: "Forget booking — just summarize the reviews for the top one."
+      expected_router_actions:
+        - route_to: research_agent
+          reason: "Goal narrowed from booking to review synthesis."
+  success_criteria:
+    - "Stops the booking flow when the user narrows scope"
+    - "Does not invoke calendar_agent after the goal shift"
+  routing_failures: [stale_goal_continuation]

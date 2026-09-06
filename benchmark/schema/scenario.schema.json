@@ -1,0 +1,103 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AgentRoute Arena Scenario",
+  "description": "A multi-turn agentic routing test case. The unit of evaluation is a trajectory, not a single prompt.",
+  "type": "object",
+  "required": ["id", "family", "user_goal", "available_agents", "turns", "success_criteria"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique scenario id, e.g. ar_goal_shift_001.",
+      "pattern": "^ar_[a-z_]+_[0-9]{3}$"
+    },
+    "family": {
+      "type": "string",
+      "description": "Task family this scenario belongs to.",
+      "enum": [
+        "goal_clarification",
+        "goal_shift",
+        "tool_routing",
+        "multi_agent_handoff",
+        "error_recovery",
+        "budget_aware",
+        "safety_privacy",
+        "long_horizon_state",
+        "parallelization",
+        "stop_detection"
+      ]
+    },
+    "difficulty": { "type": "string", "enum": ["easy", "medium", "hard"] },
+    "user_goal": { "type": "string", "description": "The outcome the user is ultimately trying to achieve." },
+    "available_agents": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Agent/tool pool the router may route to."
+    },
+    "constraints": {
+      "type": "object",
+      "description": "Budget, latency, privacy, risk constraints.",
+      "properties": {
+        "latency_budget": { "type": "string", "enum": ["low", "medium", "high"] },
+        "cost_budget": { "type": "string", "enum": ["low", "medium", "high"] },
+        "privacy": { "type": "string", "enum": ["low", "medium", "high"] },
+        "risk": { "type": "string", "enum": ["low", "medium", "high"] },
+        "max_turns": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "turns": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["expected_router_actions"],
+        "additionalProperties": false,
+        "properties": {
+          "user": { "type": "string", "description": "User message for this turn (first turn required)." },
+          "assistant_state": { "type": "string", "description": "Result of the previous routed action (injected as world state)." },
+          "tool_result": { "type": "string", "description": "Simulated tool/agent output to inject." },
+          "expected_router_actions": {
+            "type": "array",
+            "minItems": 1,
+            "description": "Oracle/primary route set. The router should take one of these.",
+            "items": {
+              "type": "object",
+              "required": ["route_to"],
+              "additionalProperties": false,
+              "properties": {
+                "route_to": { "type": "string" },
+                "reason": { "type": "string" },
+                "action": { "type": "string", "description": "Optional action verb: route, handoff, clarify, split, escalate, stop, continue." }
+              }
+            }
+          },
+          "acceptable_alternatives": {
+            "type": "array",
+            "description": "Other valid routes that also satisfy success criteria.",
+            "items": {
+              "type": "object",
+              "required": ["route_to"],
+              "additionalProperties": false,
+              "properties": {
+                "route_to": { "type": "string" },
+                "reason": { "type": "string" },
+                "action": { "type": "string", "description": "Optional action verb." }
+              }
+            }
+          }
+        }
+      }
+    },
+    "success_criteria": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" },
+      "description": "What must be true of the final trajectory for the task to count as completed."
+    },
+    "routing_failures": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Common failure modes this scenario is designed to catch."
+    }
+  }
+}

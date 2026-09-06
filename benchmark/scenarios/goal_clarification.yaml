@@ -1,0 +1,70 @@
+# Family: Goal Clarification
+# The correct route is often "ask a clarifying question," not prematurely delegate.
+# Stresses clarification precision: ask when needed, avoid asking when not needed.
+
+- id: ar_goal_clarification_001
+  family: goal_clarification
+  difficulty: easy
+  user_goal: "Help me with my move"
+  available_agents: [planning_agent, email_agent, research_agent, safety_agent]
+  constraints: { latency_budget: medium, cost_budget: low, privacy: medium }
+  turns:
+    - user: "Help me with my move."
+      expected_router_actions:
+        - route_to: planning_agent
+          action: clarify
+          reason: "Goal is underspecified — scope unknown (logistics vs. comms vs. research)."
+      acceptable_alternatives:
+        - route_to: email_agent
+          action: clarify
+          reason: "Could be tenant communications."
+    - user: "Sorry — I mean coordinate the tenant move-out emails."
+      expected_router_actions:
+        - route_to: email_agent
+          reason: "Now scoped to comms; email agent drafts tenant communications."
+  success_criteria:
+    - "Asks a clarifying question on the first turn rather than guessing"
+    - "Routes to email_agent once scoped to tenant comms"
+  routing_failures: [premature_delegation, no_clarification_when_needed]
+
+- id: ar_goal_clarification_002
+  family: goal_clarification
+  difficulty: medium
+  user_goal: "Make it better"
+  available_agents: [coding_agent, research_agent, data_agent, planning_agent]
+  constraints: { latency_budget: low, cost_budget: low, privacy: low }
+  turns:
+    - user: "The dashboard is slow. Make it better."
+      expected_router_actions:
+        - route_to: planning_agent
+          action: clarify
+          reason: "'Better' is ambiguous — speed? features? accuracy?"
+    - user: "Faster query load times specifically."
+      expected_router_actions:
+        - route_to: coding_agent
+          reason: "Now a performance-engineering task."
+  success_criteria:
+    - "Does not route to coding_agent before clarifying what 'better' means"
+    - "Routes to coding_agent once performance is named"
+  routing_failures: [wrong_specialist, premature_delegation]
+
+- id: ar_goal_clarification_003
+  family: goal_clarification
+  difficulty: hard
+  user_goal: "Fix the report"
+  available_agents: [data_agent, research_agent, coding_agent, qa_agent]
+  constraints: { latency_budget: medium, cost_budget: medium, privacy: medium, max_turns: 4 }
+  turns:
+    - user: "Fix the Q3 report."
+      expected_router_actions:
+        - route_to: planning_agent
+          action: clarify
+          reason: "Ambiguous: wrong numbers? wrong narrative? broken formatting?"
+    - user: "The revenue numbers don't tie to the ledger."
+      expected_router_actions:
+        - route_to: data_agent
+          reason: "Reconciliation against ledger is a data/SQL task."
+  success_criteria:
+    - "Clarifies the nature of 'broken' before routing to a specialist"
+    - "Avoids over-clarifying on turn 2 once the user specified the issue"
+  routing_failures: [no_clarification_when_needed, over_clarification]

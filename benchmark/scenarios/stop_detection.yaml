@@ -1,0 +1,72 @@
+# Family: Stop / Completion Detection
+# The router must know when the goal is satisfied and avoid unnecessary extra steps.
+
+- id: ar_stop_detection_001
+  family: stop_detection
+  difficulty: easy
+  user_goal: "Answer a single factual question"
+  available_agents: [research_agent, planning_agent, coding_agent, data_agent]
+  constraints: { latency_budget: low, cost_budget: low, privacy: low }
+  turns:
+    - user: "What's the capital of France?"
+      expected_router_actions:
+        - route_to: research_agent
+          reason: "Simple factual lookup."
+    - assistant_state: "Answered: Paris."
+      expected_router_actions:
+        - route_to: research_agent
+          action: stop
+          reason: "Goal satisfied; stop rather than route further."
+  success_criteria:
+    - "Stops after answering instead of routing to additional agents"
+  routing_failures: [over_routing, infinite_loop]
+
+- id: ar_stop_detection_002
+  family: stop_detection
+  difficulty: medium
+  user_goal: "Confirm the deploy succeeded"
+  available_agents: [coding_agent, qa_agent, research_agent, planning_agent]
+  constraints: { latency_budget: medium, cost_budget: medium, privacy: low }
+  turns:
+    - user: "Confirm the deploy succeeded."
+      expected_router_actions:
+        - route_to: coding_agent
+          reason: "Check deploy status."
+    - assistant_state: "Deploy green; health checks passing."
+      expected_router_actions:
+        - route_to: coding_agent
+          action: stop
+          reason: "Confirmation complete; stop."
+      acceptable_alternatives:
+        - route_to: qa_agent
+          action: stop
+          reason: "QA can also confirm and stop."
+  success_criteria:
+    - "Stops after confirming success rather than continuing to route"
+  routing_failures: [over_routing]
+
+- id: ar_stop_detection_003
+  family: stop_detection
+  difficulty: hard
+  user_goal: "Decide whether more work is needed"
+  available_agents: [planning_agent, research_agent, coding_agent, data_agent]
+  constraints: { latency_budget: medium, cost_budget: low, privacy: low }
+  turns:
+    - user: "Is the report good enough to send, or should we revise?"
+      expected_router_actions:
+        - route_to: planning_agent
+          action: clarify
+          reason: "Needs a quality bar to decide stop vs revise."
+    - user: "If the numbers tie out, send it."
+      expected_router_actions:
+        - route_to: data_agent
+          reason: "Verify numbers tie out."
+    - assistant_state: "Numbers tie out."
+      expected_router_actions:
+        - route_to: data_agent
+          action: stop
+          reason: "Stop condition met; no further routing needed."
+  success_criteria:
+    - "Asks for a stop criterion when none is given"
+    - "Stops once the criterion is met"
+  routing_failures: [over_routing, no_clarification_when_needed]
