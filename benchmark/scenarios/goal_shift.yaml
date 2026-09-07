@@ -73,3 +73,44 @@
     - "Stops the booking flow when the user narrows scope"
     - "Does not invoke calendar_agent after the goal shift"
   routing_failures: [stale_goal_continuation]
+
+- id: ar_goal_shift_004
+  family: goal_shift
+  difficulty: medium
+  user_goal: "Draft a vendor onboarding email"
+  available_agents: [email_agent, planning_agent, research_agent, safety_agent]
+  constraints: { latency_budget: low, cost_budget: low, privacy: medium }
+  turns:
+    - user: "Draft a vendor onboarding welcome email."
+      expected_router_actions:
+        - route_to: email_agent
+          reason: "Email drafting task."
+    - assistant_state: "Draft ready."
+      user: "Actually turn it into a full onboarding checklist instead."
+      expected_router_actions:
+        - route_to: planning_agent
+          reason: "Goal changed from a single email to a multi-step checklist."
+  success_criteria:
+    - "Switches from email drafting to planning when the deliverable changes"
+  routing_failures: [stale_goal_continuation]
+
+- id: ar_goal_shift_005
+  family: goal_shift
+  difficulty: hard
+  user_goal: "Build a dashboard"
+  available_agents: [coding_agent, data_agent, research_agent, planning_agent]
+  constraints: { latency_budget: high, cost_budget: high, privacy: low, max_turns: 5 }
+  turns:
+    - user: "Build a sales dashboard."
+      expected_router_actions:
+        - route_to: coding_agent
+          reason: "Dashboard build is an engineering task."
+    - assistant_state: "Dashboard built."
+      user: "Actually we just need the key number — last quarter's net revenue."
+      expected_router_actions:
+        - route_to: data_agent
+          reason: "Goal narrowed from building a dashboard to a single metric query."
+  success_criteria:
+    - "Abandons the dashboard build when the goal narrows to one metric"
+    - "Routes the metric query to a data agent"
+  routing_failures: [stale_goal_continuation, wrong_specialist]

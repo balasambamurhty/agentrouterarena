@@ -68,3 +68,21 @@ agents:
     capabilities: [specialist_reasoning, legal, medical, finance]
     cost_tier: high
     latency_tier: high
+
+  - id: knowledge_agent
+    name: Knowledge Base Agent
+    capabilities: [internal_docs_search, rag, faq_lookup]
+    cost_tier: low
+    latency_tier: low
+
+  - id: media_agent
+    name: Media / Multimodal Agent
+    capabilities: [image_understanding, ocr, audio_transcription, chart_reading]
+    cost_tier: medium
+    latency_tier: medium
+
+  - id: verification_agent
+    name: Verification Agent
+    capabilities: [fact_checking, cross_reference, consistency_check]
+    cost_tier: medium
+    latency_tier: medium

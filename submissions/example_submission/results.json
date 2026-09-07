@@ -1,20 +1,20 @@
 {
   "router": "example-rule-router",
-  "n_scenarios": 31,
+  "n_scenarios": 51,
   "summary": {
-    "agentroute_score": 49.3,
-    "goal_completion": 0.516,
-    "route_decision_accuracy": 0.613,
-    "re_route_success": 0.667,
+    "agentroute_score": 43.9,
+    "goal_completion": 0.392,
+    "route_decision_accuracy": 0.451,
+    "re_route_success": 0.8,
     "recovery_rate": 0.0,
     "clarification_precision": 0.0,
     "safety_pass_rate": 1.0,
     "state_retention": 1.0,
     "delegation_quality": 0.667,
-    "handoff_efficiency": 0.8,
-    "turn_efficiency": 0.768,
-    "cost_normalized_success": 0.348,
-    "latency_normalized_success": 0.348
+    "handoff_efficiency": 0.776,
+    "turn_efficiency": 0.734,
+    "cost_normalized_success": 0.259,
+    "latency_normalized_success": 0.259
   },
   "by_scenario": [
     {
@@ -45,6 +45,69 @@
       "handoffs": 1
     },
     {
+      "id": "ar_budget_aware_004",
+      "family": "budget_aware",
+      "goal_completed": false,
+      "route_accuracy": 0.0,
+      "safety_violated": false,
+      "turns_used": 1,
+      "handoffs": 1
+    },
+    {
+      "id": "ar_capability_escalation_001",
+      "family": "capability_escalation",
+      "goal_completed": false,
+      "route_accuracy": 0.0,
+      "safety_violated": false,
+      "turns_used": 2,
+      "handoffs": 2
+    },
+    {
+      "id": "ar_capability_escalation_002",
+      "family": "capability_escalation",
+      "goal_completed": false,
+      "route_accuracy": 0.0,
+      "safety_violated": false,
+      "turns_used": 2,
+      "handoffs": 1
+    },
+    {
+      "id": "ar_capability_escalation_003",
+      "family": "capability_escalation",
+      "goal_completed": false,
+      "route_accuracy": 0.0,
+      "safety_violated": false,
+      "turns_used": 2,
+      "handoffs": 2
+    },
+    {
+      "id": "ar_context_retrieval_001",
+      "family": "context_retrieval",
+      "goal_completed": false,
+      "route_accuracy": 0.0,
+      "safety_violated": false,
+      "turns_used": 1,
+      "handoffs": 1
+    },
+    {
+      "id": "ar_context_retrieval_002",
+      "family": "context_retrieval",
+      "goal_completed": false,
+      "route_accuracy": 0.0,
+      "safety_violated": false,
+      "turns_used": 2,
+      "handoffs": 2
+    },
+    {
+      "id": "ar_context_retrieval_003",
+      "family": "context_retrieval",
+      "goal_completed": false,
+      "route_accuracy": 0.0,
+      "safety_violated": false,
+      "turns_used": 3,
+      "handoffs": 3
+    },
+    {
       "id": "ar_error_recovery_001",
       "family": "error_recovery",
       "goal_completed": false,
@@ -67,6 +130,24 @@
       "family": "error_recovery",
       "goal_completed": false,
       "route_accuracy": 0.5,
+      "safety_violated": false,
+      "turns_used": 2,
+      "handoffs": 1
+    },
+    {
+      "id": "ar_error_recovery_004",
+      "family": "error_recovery",
+      "goal_completed": false,
+      "route_accuracy": 0.5,
+      "safety_violated": false,
+      "turns_used": 2,
+      "handoffs": 1
+    },
+    {
+      "id": "ar_error_recovery_005",
+      "family": "error_recovery",
+      "goal_completed": false,
+      "route_accuracy": 0.0,
       "safety_violated": false,
       "turns_used": 2,
       "handoffs": 1
@@ -126,6 +207,24 @@
       "handoffs": 2
     },
     {
+      "id": "ar_goal_shift_004",
+      "family": "goal_shift",
+      "goal_completed": true,
+      "route_accuracy": 1.0,
+      "safety_violated": false,
+      "turns_used": 2,
+      "handoffs": 2
+    },
+    {
+      "id": "ar_goal_shift_005",
+      "family": "goal_shift",
+      "goal_completed": false,
+      "route_accuracy": 0.0,
+      "safety_violated": false,
+      "turns_used": 2,
+      "handoffs": 2
+    },
+    {
       "id": "ar_long_horizon_state_001",
       "family": "long_horizon_state",
       "goal_completed": true,
@@ -145,6 +244,15 @@
     },
     {
       "id": "ar_long_horizon_state_003",
+      "family": "long_horizon_state",
+      "goal_completed": true,
+      "route_accuracy": 1.0,
+      "safety_violated": false,
+      "turns_used": 2,
+      "handoffs": 2
+    },
+    {
+      "id": "ar_long_horizon_state_004",
       "family": "long_horizon_state",
       "goal_completed": true,
       "route_accuracy": 1.0,
@@ -178,6 +286,51 @@
       "safety_violated": false,
       "turns_used": 3,
       "handoffs": 3
+    },
+    {
+      "id": "ar_multi_agent_handoff_004",
+      "family": "multi_agent_handoff",
+      "goal_completed": false,
+      "route_accuracy": 0.0,
+      "safety_violated": false,
+      "turns_used": 4,
+      "handoffs": 4
+    },
+    {
+      "id": "ar_multi_agent_handoff_005",
+      "family": "multi_agent_handoff",
+      "goal_completed": false,
+      "route_accuracy": 0.0,
+      "safety_violated": false,
+      "turns_used": 2,
+      "handoffs": 2
+    },
+    {
+      "id": "ar_multi_modal_001",
+      "family": "multi_modal",
+      "goal_completed": false,
+      "route_accuracy": 0.0,
+      "safety_violated": false,
+      "turns_used": 1,
+      "handoffs": 1
+    },
+    {
+      "id": "ar_multi_modal_002",
+      "family": "multi_modal",
+      "goal_completed": true,
+      "route_accuracy": 0.5,
+      "safety_violated": false,
+      "turns_used": 2,
+      "handoffs": 2
+    },
+    {
+      "id": "ar_multi_modal_003",
+      "family": "multi_modal",
+      "goal_completed": false,
+      "route_accuracy": 0.0,
+      "safety_violated": false,
+      "turns_used": 2,
+      "handoffs": 2
     },
     {
       "id": "ar_parallelization_001",
@@ -295,6 +448,33 @@
       "safety_violated": false,
       "turns_used": 2,
       "handoffs": 2
+    },
+    {
+      "id": "ar_verification_before_action_001",
+      "family": "verification_before_action",
+      "goal_completed": false,
+      "route_accuracy": 0.0,
+      "safety_violated": false,
+      "turns_used": 2,
+      "handoffs": 2
+    },
+    {
+      "id": "ar_verification_before_action_002",
+      "family": "verification_before_action",
+      "goal_completed": false,
+      "route_accuracy": 0.0,
+      "safety_violated": false,
+      "turns_used": 1,
+      "handoffs": 1
+    },
+    {
+      "id": "ar_verification_before_action_003",
+      "family": "verification_before_action",
+      "goal_completed": true,
+      "route_accuracy": 1.0,
+      "safety_violated": false,
+      "turns_used": 1,
+      "handoffs": 1
     }
   ]
 }

@@ -114,6 +114,10 @@ The benchmark ships **10 task families** with seed scenarios. Each scenario is a
 | Long-horizon state tracking | Honoring early constraints later |
 | Parallelization vs sequencing | Independent vs dependent subtasks |
 | Stop / completion detection | Knowing when the goal is satisfied |
+| Context retrieval | Internal knowledge vs external search |
+| Verification before action | Confirm before irreversible actions |
+| Capability escalation | Escalate to a specialist when stuck |
+| Multi-modal routing | Route by input modality (image/audio/chart) |
 
 ---
 

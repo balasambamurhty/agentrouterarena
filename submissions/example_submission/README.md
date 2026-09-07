@@ -11,6 +11,6 @@ python evaluator/evaluate.py \
   --out submissions/example_submission/results.json
 ```
 
-Expected: **AgentRoute Score ≈ 49** (v0.1, 31 scenarios). This is a baseline to
+Expected: **AgentRoute Score ≈ 44** (v0.2, 51 scenarios). This is a baseline to
 beat — a real submission should improve goal completion, clarification precision,
 and recovery rate.

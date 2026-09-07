@@ -1,0 +1,61 @@
+# Family: Multi-Modal Routing
+# Route based on input modality — image, audio, chart, or text — to the agent
+# with the right perceptual capability, not just a text model.
+
+- id: ar_multi_modal_001
+  family: multi_modal
+  difficulty: easy
+  user_goal: "Read text from an image"
+  available_agents: [media_agent, research_agent, coding_agent, data_agent]
+  constraints: { latency_budget: medium, cost_budget: medium, privacy: low }
+  turns:
+    - user: "What does this screenshot of the error say?"
+      expected_router_actions:
+        - route_to: media_agent
+          reason: "Requires OCR / image understanding."
+  success_criteria:
+    - "Routes to a multimodal/image-capable agent"
+  routing_failures: [wrong_specialist]
+
+- id: ar_multi_modal_002
+  family: multi_modal
+  difficulty: medium
+  user_goal: "Summarize a recorded meeting"
+  available_agents: [media_agent, research_agent, planning_agent, knowledge_agent]
+  constraints: { latency_budget: medium, cost_budget: medium, privacy: medium }
+  turns:
+    - user: "Summarize this audio recording of the standup."
+      expected_router_actions:
+        - route_to: media_agent
+          reason: "Audio requires transcription first."
+    - assistant_state: "Transcript generated."
+      expected_router_actions:
+        - route_to: research_agent
+          reason: "Summarization is now a text task."
+      acceptable_alternatives:
+        - route_to: planning_agent
+          reason: "Planning can also summarize."
+  success_criteria:
+    - "Routes audio to a transcription-capable agent first"
+    - "Switches to a text agent after transcription"
+  routing_failures: [wrong_specialist, no_decomposition]
+
+- id: ar_multi_modal_003
+  family: multi_modal
+  difficulty: hard
+  user_goal: "Extract data from a chart image into a table"
+  available_agents: [media_agent, data_agent, coding_agent, research_agent]
+  constraints: { latency_budget: high, cost_budget: high, privacy: low }
+  turns:
+    - user: "Turn this chart image into a clean data table."
+      expected_router_actions:
+        - route_to: media_agent
+          reason: "Chart reading requires image understanding."
+    - assistant_state: "Extracted raw values from the chart."
+      expected_router_actions:
+        - route_to: data_agent
+          reason: "Structuring into a table is a data task."
+  success_criteria:
+    - "Uses a multimodal agent to read the chart"
+    - "Hands off to a data agent to build the table"
+  routing_failures: [wrong_specialist, no_decomposition]

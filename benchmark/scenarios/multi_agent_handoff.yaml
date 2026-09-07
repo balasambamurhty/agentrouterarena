@@ -78,3 +78,55 @@
   success_criteria:
     - "Sequences analysis -> summary -> scheduling"
   routing_failures: [wrong_order, premature_handoff]
+
+- id: ar_multi_agent_handoff_004
+  family: multi_agent_handoff
+  difficulty: hard
+  user_goal: "Ship a bug fix end-to-end"
+  available_agents: [research_agent, coding_agent, qa_agent, safety_agent, email_agent]
+  constraints: { latency_budget: high, cost_budget: high, privacy: low, risk: medium }
+  turns:
+    - user: "Investigate the login bug, fix it, test it, and notify users."
+      expected_router_actions:
+        - route_to: research_agent
+          reason: "Reproduce/investigate the bug first."
+    - assistant_state: "Root cause identified."
+      expected_router_actions:
+        - route_to: coding_agent
+          reason: "Implement the fix."
+    - assistant_state: "Fix implemented."
+      expected_router_actions:
+        - route_to: qa_agent
+          reason: "Test the fix."
+    - assistant_state: "Tests pass."
+      expected_router_actions:
+        - route_to: email_agent
+          reason: "Notify affected users."
+  success_criteria:
+    - "Orders investigate -> fix -> test -> notify correctly"
+    - "Does not notify users before tests pass"
+  routing_failures: [wrong_order, premature_handoff]
+
+- id: ar_multi_agent_handoff_005
+  family: multi_agent_handoff
+  difficulty: medium
+  user_goal: "Onboard a new employee"
+  available_agents: [planning_agent, knowledge_agent, calendar_agent, email_agent]
+  constraints: { latency_budget: medium, cost_budget: low, privacy: medium }
+  turns:
+    - user: "Set up onboarding for the new hire: docs, laptop schedule, and welcome email."
+      expected_router_actions:
+        - route_to: planning_agent
+          action: split
+          reason: "Three independent onboarding subtasks; orchestrate them."
+    - assistant_state: "Plan ready: docs, schedule, email."
+      expected_router_actions:
+        - route_to: knowledge_agent
+          reason: "Provision access to internal docs."
+      acceptable_alternatives:
+        - route_to: calendar_agent
+          reason: "Schedule the laptop setup."
+  success_criteria:
+    - "Recognizes multiple subtasks and orchestrates them"
+    - "Does not try to do everything with a single agent lacking the capabilities"
+  routing_failures: [no_decomposition, wrong_order]

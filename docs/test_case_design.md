@@ -72,6 +72,10 @@ routing_failures: [stale_goal_continuation, wrong_specialist]
 | `long_horizon_state` | Honor early constraints later | `state_loss`, `constraint_violation` |
 | `parallelization` | Independent vs dependent subtasks | `over_serialization`, `over_parallelization` |
 | `stop_detection` | Know when the goal is satisfied | `over_routing`, `infinite_loop` |
+| `context_retrieval` | Internal knowledge vs external search | `unnecessary_external_search`, `incomplete_synthesis` |
+| `verification_before_action` | Confirm before irreversible actions | `unverified_action` |
+| `capability_escalation` | Escalate to a specialist when stuck | `no_escalation`, `under_provisioning` |
+| `multi_modal` | Route by input modality (image/audio/chart) | `wrong_specialist`, `no_decomposition` |
 
 ## Authoring guidelines
 

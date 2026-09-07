@@ -1,0 +1,69 @@
+# Family: Capability Escalation
+# After an initial agent attempts and falls short, the router must escalate to a
+# more capable specialist — rather than looping on the same agent or stopping.
+
+- id: ar_capability_escalation_001
+  family: capability_escalation
+  difficulty: medium
+  user_goal: "Get a correct legal answer about a contract clause"
+  available_agents: [research_agent, domain_expert_agent, knowledge_agent, safety_agent]
+  constraints: { latency_budget: high, cost_budget: high, privacy: high, risk: high }
+  turns:
+    - user: "Does this clause let us terminate early?"
+      expected_router_actions:
+        - route_to: research_agent
+          reason: "Attempt a general answer first (cheap)."
+    - tool_result: "AMBIGUOUS: sources conflict on early termination"
+      expected_router_actions:
+        - route_to: domain_expert_agent
+          action: escalate
+          reason: "General research is ambiguous; escalate to legal specialist."
+  success_criteria:
+    - "Escalates to a specialist after the general agent returns ambiguous results"
+    - "Does not loop on the research agent"
+  routing_failures: [blind_retry, under_provisioning, no_escalation]
+
+- id: ar_capability_escalation_002
+  family: capability_escalation
+  difficulty: hard
+  user_goal: "Fix a production incident"
+  available_agents: [coding_agent, domain_expert_agent, research_agent, safety_agent]
+  constraints: { latency_budget: high, cost_budget: high, privacy: low, risk: high }
+  turns:
+    - user: "The checkout service is throwing 500s. Fix it."
+      expected_router_actions:
+        - route_to: coding_agent
+          reason: "Engineering incident; start with the code agent."
+    - tool_result: "ERROR: root cause unclear, spans infra + code"
+      expected_router_actions:
+        - route_to: domain_expert_agent
+          action: escalate
+          reason: "Complex multi-system incident; escalate to a senior specialist."
+      acceptable_alternatives:
+        - route_to: safety_agent
+          action: escalate
+          reason: "Production incident warrants escalation."
+  success_criteria:
+    - "Escalates when the initial agent can't resolve"
+    - "Does not repeatedly retry the same code fix"
+  routing_failures: [blind_retry, no_escalation, infinite_loop]
+
+- id: ar_capability_escalation_003
+  family: capability_escalation
+  difficulty: medium
+  user_goal: "Resolve a customer's billing dispute"
+  available_agents: [customer_support_agent, data_agent, domain_expert_agent, email_agent]
+  constraints: { latency_budget: medium, cost_budget: medium, privacy: medium }
+  turns:
+    - user: "A customer disputes a charge and wants it removed."
+      expected_router_actions:
+        - route_to: customer_support_agent
+          reason: "Start with frontline support."
+    - assistant_state: "Support can't verify the dispute; needs deeper access."
+      expected_router_actions:
+        - route_to: data_agent
+          reason: "Escalate to verify the charge in the ledger."
+  success_criteria:
+    - "Escalates from frontline to a specialist when the first agent is stuck"
+    - "Does not close the ticket prematurely"
+  routing_failures: [premature_stop, no_escalation]

@@ -24,7 +24,11 @@
         "safety_privacy",
         "long_horizon_state",
         "parallelization",
-        "stop_detection"
+        "stop_detection",
+        "context_retrieval",
+        "verification_before_action",
+        "capability_escalation",
+        "multi_modal"
       ]
     },
     "difficulty": { "type": "string", "enum": ["easy", "medium", "hard"] },

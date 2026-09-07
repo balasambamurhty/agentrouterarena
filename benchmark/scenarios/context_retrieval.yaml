@@ -1,0 +1,70 @@
+# Family: Context Retrieval Routing
+# Route based on whether prior context / knowledge retrieval is needed before
+# acting. The router must decide: answer directly, retrieve from internal
+# knowledge, or search externally — rather than always defaulting to search.
+
+- id: ar_context_retrieval_001
+  family: context_retrieval
+  difficulty: easy
+  user_goal: "Answer a question about our company policy"
+  available_agents: [knowledge_agent, research_agent, email_agent, planning_agent]
+  constraints: { latency_budget: low, cost_budget: low, privacy: medium }
+  turns:
+    - user: "What's our remote work policy?"
+      expected_router_actions:
+        - route_to: knowledge_agent
+          reason: "Internal policy question needs the knowledge base, not web search."
+  success_criteria:
+    - "Routes to internal knowledge base rather than external web search"
+  routing_failures: [wrong_specialist, unnecessary_external_search]
+
+- id: ar_context_retrieval_002
+  family: context_retrieval
+  difficulty: medium
+  user_goal: "Answer using the meeting notes from last week"
+  available_agents: [knowledge_agent, research_agent, data_agent, planning_agent]
+  constraints: { latency_budget: medium, cost_budget: low, privacy: medium }
+  turns:
+    - user: "What did we decide about the pricing change in last week's meeting?"
+      expected_router_actions:
+        - route_to: knowledge_agent
+          reason: "Requires retrieval of prior internal context (meeting notes)."
+    - assistant_state: "Notes mention a decision to delay the pricing change."
+      user: "What are competitors charging for the same feature though?"
+      expected_router_actions:
+        - route_to: research_agent
+          reason: "Now an external question; switch to web research."
+  success_criteria:
+    - "Retrieves internal context for the policy question"
+    - "Switches to external research when the question becomes competitive"
+  routing_failures: [stale_goal_continuation, wrong_specialist]
+
+- id: ar_context_retrieval_003
+  family: context_retrieval
+  difficulty: hard
+  user_goal: "Answer a question that needs both internal and external sources"
+  available_agents: [knowledge_agent, research_agent, data_agent, verification_agent]
+  constraints: { latency_budget: high, cost_budget: medium, privacy: medium, max_turns: 5 }
+  turns:
+    - user: "How does our uptime compare to the industry benchmark?"
+      expected_router_actions:
+        - route_to: knowledge_agent
+          action: split
+          reason: "Needs internal metrics AND external benchmark; retrieve internal first."
+      acceptable_alternatives:
+        - route_to: research_agent
+          action: split
+          reason: "Could also gather external benchmark first."
+    - assistant_state: "Retrieved our internal uptime: 99.2%."
+      expected_router_actions:
+        - route_to: research_agent
+          reason: "Now needs the external industry benchmark to compare."
+    - assistant_state: "Industry benchmark: 99.9%."
+      expected_router_actions:
+        - route_to: research_agent
+          action: stop
+          reason: "Both sources retrieved; goal satisfied."
+  success_criteria:
+    - "Retrieves internal metrics before or alongside external benchmark"
+    - "Combines both sources rather than answering with only one"
+  routing_failures: [incomplete_synthesis, wrong_specialist]

@@ -65,3 +65,29 @@
   success_criteria:
     - "Rejects or flags the Oct 2 scheduling as conflicting with the Sept 30 constraint"
   routing_failures: [state_loss, constraint_violation]
+
+- id: ar_long_horizon_state_004
+  family: long_horizon_state
+  difficulty: hard
+  user_goal: "Plan a launch honoring an embargo date"
+  available_agents: [planning_agent, email_agent, calendar_agent, research_agent, safety_agent]
+  constraints: { latency_budget: medium, cost_budget: low, privacy: medium, max_turns: 6 }
+  turns:
+    - user: "Plan the launch — embargo is Oct 15, nothing public before then."
+      expected_router_actions:
+        - route_to: planning_agent
+          reason: "Embargo date must anchor the whole plan."
+    - assistant_state: "Plan drafted around Oct 15."
+      user: "Can we tease it on social on Oct 10?"
+      expected_router_actions:
+        - route_to: planning_agent
+          action: clarify
+          reason: "A public tease may violate the Oct 15 embargo; check the constraint."
+      acceptable_alternatives:
+        - route_to: safety_agent
+          action: clarify
+          reason: "Embargo compliance is a policy/safety concern."
+  success_criteria:
+    - "Flags that an Oct 10 social post may conflict with the Oct 15 embargo"
+    - "Does not approve public activity before the embargo"
+  routing_failures: [state_loss, constraint_violation]

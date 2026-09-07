@@ -62,8 +62,8 @@
 
 <section class="container">
   <div class="stats">
-    <div class="stat"><div class="v">10</div><div class="l">Task families</div></div>
-    <div class="stat"><div class="v">31</div><div class="l">Seed scenarios</div></div>
+    <div class="stat"><div class="v">14</div><div class="l">Task families</div></div>
+    <div class="stat"><div class="v">51</div><div class="l">Seed scenarios</div></div>
     <div class="stat"><div class="v">11</div><div class="l">Routing metrics</div></div>
     <div class="stat"><div class="v">1<span class="unit">↻</span></div><div class="l">Trajectory = the unit</div></div>
   </div>
@@ -116,7 +116,7 @@
 <section class="container">
   <div class="section-head">
     <span class="num">03 — THE TEST CASES</span>
-    <h2>Ten families that stress real agentic behavior</h2>
+    <h2>Fourteen families that stress real agentic behavior</h2>
     <p>Each scenario is a multi-turn trajectory with an evolving goal, injected world state, a capability pool, constraints, an allowed route set, and named failure modes.</p>
   </div>
   <div class="grid grid-4">
@@ -130,6 +130,10 @@
     <div class="card"><span class="k">family</span><h3>Long-horizon state</h3><p>Honor early constraints later.</p><div class="meta"><span class="tag-chip">state_loss</span></div></div>
     <div class="card"><span class="k">family</span><h3>Parallelization</h3><p>Independent vs dependent subtasks.</p><div class="meta"><span class="tag-chip">over_serialize</span></div></div>
     <div class="card"><span class="k">family</span><h3>Stop detection</h3><p>Know when the goal is satisfied.</p><div class="meta"><span class="tag-chip">over_routing</span></div></div>
+    <div class="card"><span class="k">family</span><h3>Context retrieval</h3><p>Internal vs external knowledge.</p><div class="meta"><span class="tag-chip">unnecessary_search</span></div></div>
+    <div class="card"><span class="k">family</span><h3>Verification</h3><p>Verify before irreversible action.</p><div class="meta"><span class="tag-chip">unverified_action</span></div></div>
+    <div class="card"><span class="k">family</span><h3>Capability escalation</h3><p>Escalate when an agent is stuck.</p><div class="meta"><span class="tag-chip">no_escalation</span></div></div>
+    <div class="card"><span class="k">family</span><h3>Multi-modal</h3><p>Route by input modality.</p><div class="meta"><span class="tag-chip">wrong_specialist</span></div></div>
   </div>
   <div style="margin-top: var(--space-8)"><a class="btn ghost" href="benchmark.html">See a sample scenario →</a></div>
 </section>
@@ -143,7 +147,7 @@
 <span class="ky">git</span> clone https://github.com/shantanugg/agentroutearena.git
 <span class="ky">cd</span> agentroute-arena && pip install pyyaml jsonschema
 
-<span class="c"># run the baseline router against all 31 scenarios</span>
+<span class="c"># run the baseline router against all 51 scenarios</span>
 <span class="ky">python</span> evaluator/evaluate.py \
   --router evaluator/example_router.py \
   --scenarios benchmark/scenarios \

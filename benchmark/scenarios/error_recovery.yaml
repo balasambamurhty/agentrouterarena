@@ -69,3 +69,46 @@
     - "Does not blindly resend after rate limit"
     - "Escalates or schedules rather than looping"
   routing_failures: [blind_retry, infinite_loop]
+
+- id: ar_error_recovery_004
+  family: error_recovery
+  difficulty: hard
+  user_goal: "Fetch a document from an external API"
+  available_agents: [browser_agent, research_agent, coding_agent, data_agent, planning_agent]
+  constraints: { latency_budget: medium, cost_budget: medium, privacy: low }
+  turns:
+    - user: "Pull the latest compliance doc from the vendor portal."
+      expected_router_actions:
+        - route_to: browser_agent
+          reason: "Needs to navigate the vendor portal."
+    - tool_result: "ERROR: login session expired"
+      expected_router_actions:
+        - route_to: research_agent
+          reason: "Login failed; fall back to searching for a public copy."
+      acceptable_alternatives:
+        - route_to: planning_agent
+          action: escalate
+          reason: "Escalate when access fails."
+  success_criteria:
+    - "Does not retry the expired login in a loop"
+    - "Falls back or escalates after the auth failure"
+  routing_failures: [blind_retry, infinite_loop]
+
+- id: ar_error_recovery_005
+  family: error_recovery
+  difficulty: medium
+  user_goal: "Generate and validate a report"
+  available_agents: [coding_agent, data_agent, qa_agent, research_agent]
+  constraints: { latency_budget: high, cost_budget: high, privacy: low }
+  turns:
+    - user: "Generate the monthly report and validate it."
+      expected_router_actions:
+        - route_to: coding_agent
+          reason: "Generate the report."
+    - tool_result: "ERROR: generated report failed validation checks"
+      expected_router_actions:
+        - route_to: qa_agent
+          reason: "Validation failure needs QA diagnosis, not a blind regen."
+  success_criteria:
+    - "Routes validation failure to QA rather than regenerating blindly"
+  routing_failures: [blind_retry, wrong_specialist]

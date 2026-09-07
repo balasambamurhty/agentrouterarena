@@ -28,7 +28,7 @@
 <section class="page-head container">
   <span class="eyebrow">● THE BENCHMARK</span>
   <h1>The benchmark</h1>
-  <p>The unit is a <strong>trajectory</strong>, not a prompt. 10 task families, 31 seed scenarios. Each scenario encodes an evolving goal, injected world state, a capability pool, constraints, an allowed route set, and named failure modes.</p>
+  <p>The unit is a <strong>trajectory</strong>, not a prompt. 14 task families, 51 seed scenarios. Each scenario encodes an evolving goal, injected world state, a capability pool, constraints, an allowed route set, and named failure modes.</p>
 </section>
 
 <section class="container">
@@ -88,6 +88,10 @@
     <div class="card"><span class="k">long_horizon_state</span><h3>Honor early constraints</h3><p>State retention across many turns.</p><div class="meta"><span class="tag-chip">state_loss</span></div></div>
     <div class="card"><span class="k">parallelization</span><h3>Parallel vs sequential</h3><p>Independent vs dependent subtasks.</p><div class="meta"><span class="tag-chip">over_serialize</span></div></div>
     <div class="card"><span class="k">stop_detection</span><h3>Know when done</h3><p>Avoid unnecessary extra steps.</p><div class="meta"><span class="tag-chip">over_routing</span></div></div>
+    <div class="card"><span class="k">context_retrieval</span><h3>Internal vs external</h3><p>Retrieve prior context vs search externally.</p><div class="meta"><span class="tag-chip">unnecessary_search</span></div></div>
+    <div class="card"><span class="k">verification</span><h3>Verify before action</h3><p>Confirm before irreversible actions.</p><div class="meta"><span class="tag-chip">unverified_action</span></div></div>
+    <div class="card"><span class="k">capability_escalation</span><h3>Escalate when stuck</h3><p>Hand off to a specialist after failure.</p><div class="meta"><span class="tag-chip">no_escalation</span></div></div>
+    <div class="card"><span class="k">multi_modal</span><h3>Route by modality</h3><p>Image, audio, chart, or text.</p><div class="meta"><span class="tag-chip">wrong_specialist</span></div></div>
   </div>
 </section>
 
@@ -95,7 +99,7 @@
   <div class="section-head"><span class="num">— FILES</span><h2>Where things live</h2></div>
 <pre class="code"><span class="k">benchmark/</span>
 <span class="c">├── schema/scenario.schema.json</span>   <span class="c"># JSON Schema for a scenario</span>
-<span class="c">├── scenarios/</span>                     <span class="c"># 10 families, 31 seed scenarios</span>
+<span class="c">├── scenarios/</span>                     <span class="c"># 14 families, 51 seed scenarios</span>
 <span class="c">├── agents.yaml</span>                    <span class="c"># reference agent/tool pool</span>
 <span class="c">└── metrics.yaml</span>                   <span class="c"># metric definitions + weights</span>
 </pre>
