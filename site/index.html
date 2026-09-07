@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='6' cy='8' r='3' fill='%2322d3ee'/><circle cx='26' cy='8' r='3' fill='%23818cf8'/><circle cx='16' cy='24' r='3' fill='%2322d3ee'/><path d='M9 8 L23 8 M16 11 L16 21' stroke='%23818cf8' stroke-width='2' fill='none'/></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='6' cy='8' r='3' fill='%232e5d32'/><circle cx='26' cy='8' r='3' fill='%23b5651d'/><circle cx='16' cy='24' r='3' fill='%232e5d32'/><path d='M9 8 L23 8 M16 11 L16 21' stroke='%23b5651d' stroke-width='2' fill='none'/></svg>">
 </head>
 <body>
 <header class="site-header">
@@ -35,28 +35,40 @@
 
 <main>
 <section class="hero container">
-  <svg class="hero-diagram" viewBox="0 0 520 420" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-    <g stroke="#22d3ee" opacity="0.5">
-      <circle cx="60" cy="60" r="6"/><circle cx="260" cy="40" r="6"/><circle cx="460" cy="90" r="6"/>
-      <circle cx="120" cy="220" r="6"/><circle cx="320" cy="200" r="6"/><circle cx="440" cy="260" r="6"/>
-      <circle cx="200" cy="360" r="6"/>
-    </g>
-    <g stroke="#818cf8" opacity="0.6">
-      <path d="M66 60 C150 50 200 45 254 40" stroke-dasharray="4 4"/>
-      <path d="M266 40 C360 50 420 70 454 90" stroke-dasharray="4 4"/>
-      <path d="M60 66 C80 120 100 180 117 214" stroke-dasharray="4 4"/>
-      <path d="M266 46 C300 110 310 160 318 194" stroke-dasharray="4 4"/>
-      <path d="M464 96 C470 160 455 220 442 254" stroke-dasharray="4 4"/>
-      <path d="M326 206 C280 280 240 330 206 354" stroke-dasharray="4 4"/>
-    </g>
-  </svg>
-
-  <span class="eyebrow">● v0.1 · seed benchmark live</span>
-  <h1>Stop benchmarking <span class="grad">single turns.</span><br>Start benchmarking <span class="grad">trajectories.</span></h1>
-  <p class="lead">LLM routing picks the best model for one prompt. <strong>Agentic routing</strong> picks the best agent, tool path, handoff, or clarification strategy across an evolving goal — across many turns. AgentRoute Arena is the open benchmark for that.</p>
-  <div class="cta-row">
-    <a class="btn primary" href="leaderboard.html">View leaderboard</a>
-    <a class="btn ghost" href="benchmark.html">Explore the benchmark</a>
+  <div class="hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow">● v0.2 · seed benchmark live</span>
+      <h1>Stop benchmarking <span class="grad">single turns.</span><br>Start benchmarking <span class="grad">trajectories.</span></h1>
+      <p class="lead">LLM routing picks the best model for one prompt. <strong>Agentic routing</strong> picks the best agent, tool path, handoff, or clarification strategy across an evolving goal — across many turns. AgentRoute Arena is the open benchmark for that.</p>
+      <div class="cta-row">
+        <a class="btn primary" href="leaderboard.html">View leaderboard</a>
+        <a class="btn ghost" href="benchmark.html">Explore the benchmark</a>
+      </div>
+    </div>
+    <aside class="mini-lb" aria-label="Top routers preview">
+      <div class="mini-lb-head">
+        <span class="mini-lb-title">Top routers</span>
+        <a class="mini-lb-link" href="leaderboard.html">All →</a>
+      </div>
+      <ol class="mini-lb-list">
+        <li>
+          <span class="medal gold">1</span>
+          <span class="mini-lb-name">constraint-aware-router</span>
+          <span class="mini-lb-score">76.8</span>
+        </li>
+        <li>
+          <span class="medal silver">2</span>
+          <span class="mini-lb-name">trajectory-llm-router</span>
+          <span class="mini-lb-score">71.4</span>
+        </li>
+        <li>
+          <span class="medal bronze">3</span>
+          <span class="mini-lb-name">example-rule-router</span>
+          <span class="mini-lb-score">43.9</span>
+        </li>
+      </ol>
+      <div class="mini-lb-foot">Want your router here? <a href="submit.html">Submit it →</a></div>
+    </aside>
   </div>
 </section>
 
