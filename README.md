@@ -144,20 +144,33 @@ This is a v0.2 seed benchmark: 14 families, 51 seed scenarios, a reference evalu
 
 ## Ecosystem
 
-AgentRoute Arena targets **multi-turn, goal-based agentic routing** — the gap left open by most existing systems, which are **single-turn LLM routers** that pick the best model per prompt. Notable routers in the space:
+AgentRoute Arena targets **multi-turn, goal-based agentic routing** — the gap
+left open by most existing systems, which are **single-turn LLM routers** that
+pick the best model per prompt. Notable routers in the space, with the two
+open-source vendors independently tested in our sandbox:
 
-| Router | License | Best for | Standout feature |
-| --- | --- | --- | --- |
-| [Not Diamond](https://www.notdiamond.ai/) | Closed (SaaS) | Coding agents | Predicts model + reasoning effort per step using payload semantics, KV-cache state, and past-turn sequence |
-| [AWS Kiro (Auto Mode)](https://kiro.dev/docs/models/available-models/) | Closed (managed) | Enterprise dev workflows | Built-in cost-benefit router with multi-agent task breakdown |
-| [Kiro Gateway](https://github.com/jwadow/kiro-gateway) | Open (AGPL-3.0) | Local proxy networks | Multi-account failover, unified OpenAI/Anthropic stream proxy |
-| [OpenRouter](https://openrouter.ai/) | Closed (SaaS) | 400+ hosted models | Native "Auto" mode powered by Not Diamond |
-| [Unify](https://unify.ai/) | Closed (SaaS) | Quality/cost/latency balance | Learned neural scorer + live runtime benchmarks refreshed every 10 min |
-| [Martian](https://withmartian.com/) | Closed (SaaS) | Real-time per-query selection | Self-described "first LLM router" |
-| [LiteLLM](https://github.com/BerriAI/litellm) | Open (MIT) | Self-hosted proxy | Custom fallback, load balancing & cost controls |
-| [RouterArena](https://routeworks.github.io/) | Open benchmark | Single-turn LLM routers | The reference benchmark AgentRoute Arena extends to trajectories |
+| Router | License | Agentic fit | Status | Key capability |
+| --- | --- | --- | --- | --- |
+| [LiteLLM](https://github.com/BerriAI/litellm) | Open (MIT) | None | **Tested · PASS** | Load balancing, fallback-on-failure, retry-then-fallback across model deployments |
+| [Kiro Gateway](https://github.com/jwadow/kiro-gateway) | Open (AGPL-3.0) | None | **Tested · 1691/1691 tests pass** | Multi-account failover proxy; OpenAI/Anthropic-compatible API over Kiro |
+| [Not Diamond](https://www.notdiamond.ai/) | Closed (SaaS) | Partial | Vendor-claimed | Predicts model + reasoning effort per step using payload semantics, KV-cache state, and past-turn sequence |
+| [AWS Kiro (Auto Mode)](https://kiro.dev/docs/models/available-models/) | Closed (managed) | Partial | Vendor-claimed | Built-in cost-benefit router with multi-agent task breakdown |
+| [OpenRouter](https://openrouter.ai/) | Closed (SaaS) | None | Vendor-claimed | Native "Auto" mode (Not Diamond backend) over 400+ hosted models |
+| [Unify](https://unify.ai/) | Closed (SaaS) | None | Vendor-claimed | Learned neural scorer + live runtime benchmarks across 100+ providers |
+| [Martian](https://withmartian.com/) | Closed (SaaS) | None | Vendor-claimed | Real-time per-query model selection ("first LLM router") |
+| [RouterArena](https://routeworks.github.io/) | Open benchmark | n/a | Reference | The single-turn LLM-router benchmark this project extends |
 
-Single-turn routers answer "which model for this prompt?" AgentRoute Arena answers "which agent, tool path, handoff, or clarification across this evolving goal?" — the multi-turn complement to the systems above.
+This is a **capability survey, not the AgentRoute Score benchmark** — these are
+LLM gateway / model routers, not multi-turn agentic routers, so they can't be
+scored on the 51 trajectory scenarios. Full methodology and reproducible test
+scripts: [`docs/vendor-testing.md`](docs/vendor-testing.md) and
+[`benchmark/vendors/test_litellm_router.py`](benchmark/vendors/test_litellm_router.py).
+
+Single-turn routers answer "which model for this prompt?" AgentRoute Arena
+answers "which agent, tool path, handoff, or clarification across this evolving
+goal?" — the multi-turn complement to the systems above. Not Diamond and AWS
+Kiro are the closest existing systems to agentic routing (session / multi-agent
+aware); the rest are single-turn selectors or failover proxies.
 
 ## License
 
