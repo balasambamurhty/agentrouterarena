@@ -1,5 +1,7 @@
 # AgentRoute Arena
 
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0) [![Scenarios: 51](https://img.shields.io/badge/scenarios-51%20across%2014%20families-06b6d4)](benchmark/scenarios/)
+
 **An open platform for comprehensive comparison of agentic routers.**
 
 > LLM routing picks the best model for a single prompt.
@@ -100,7 +102,7 @@ A router is any Python object implementing the interface in `evaluator/router_in
 
 ## Test cases
 
-The benchmark ships **10 task families** with seed scenarios. Each scenario is a multi-turn trajectory with `expected_router_actions` (the oracle/allowed route set) and `success_criteria`. See `docs/test_case_design.md` and `benchmark/scenarios/`.
+The benchmark ships **14 task families** with seed scenarios. Each scenario is a multi-turn trajectory with `expected_router_actions` (the oracle/allowed route set) and `success_criteria`. See `docs/test_case_design.md` and `benchmark/scenarios/`.
 
 | Family | What it stresses |
 |---|---|
@@ -138,8 +140,25 @@ The leaderboard uses a composite **AgentRoute Score** from submetrics: goal comp
 
 ## Status
 
-This is a v0.1 seed benchmark: 10 families, ~35 seed scenarios, a reference evaluator, and a baseline router. Leaderboard rows shown on the site are **illustrative baselines** to demonstrate the format — submit a real router to appear on the live board.
+This is a v0.2 seed benchmark: 14 families, 51 seed scenarios, a reference evaluator, and a baseline router. Leaderboard rows shown on the site are **illustrative baselines** to demonstrate the format — submit a real router to appear on the live board.
+
+## Ecosystem
+
+AgentRoute Arena targets **multi-turn, goal-based agentic routing** — the gap left open by most existing systems, which are **single-turn LLM routers** that pick the best model per prompt. Notable routers in the space:
+
+| Router | License | Best for | Standout feature |
+| --- | --- | --- | --- |
+| [Not Diamond](https://www.notdiamond.ai/) | Closed (SaaS) | Coding agents | Predicts model + reasoning effort per step using payload semantics, KV-cache state, and past-turn sequence |
+| [AWS Kiro (Auto Mode)](https://kiro.dev/docs/models/available-models/) | Closed (managed) | Enterprise dev workflows | Built-in cost-benefit router with multi-agent task breakdown |
+| [Kiro Gateway](https://github.com/jwadow/kiro-gateway) | Open (AGPL-3.0) | Local proxy networks | Multi-account failover, unified OpenAI/Anthropic stream proxy |
+| [OpenRouter](https://openrouter.ai/) | Closed (SaaS) | 400+ hosted models | Native "Auto" mode powered by Not Diamond |
+| [Unify](https://unify.ai/) | Closed (SaaS) | Quality/cost/latency balance | Learned neural scorer + live runtime benchmarks refreshed every 10 min |
+| [Martian](https://withmartian.com/) | Closed (SaaS) | Real-time per-query selection | Self-described "first LLM router" |
+| [LiteLLM](https://github.com/BerriAI/litellm) | Open (MIT) | Self-hosted proxy | Custom fallback, load balancing & cost controls |
+| [RouterArena](https://routeworks.github.io/) | Open benchmark | Single-turn LLM routers | The reference benchmark AgentRoute Arena extends to trajectories |
+
+Single-turn routers answer "which model for this prompt?" AgentRoute Arena answers "which agent, tool path, handoff, or clarification across this evolving goal?" — the multi-turn complement to the systems above.
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+Apache License 2.0 — see [LICENSE](LICENSE).

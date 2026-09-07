@@ -47,11 +47,35 @@
   <div class="section-head"><span class="num">— METHODOLOGY</span><h2>How rows are computed</h2></div>
   <p class="text-muted">Each router is run deterministically over all scenarios. Per-turn routing decisions are compared to the <code>expected_router_actions</code> / <code>acceptable_alternatives</code> oracle sets. Eleven submetrics are aggregated into the composite score. See <a href="metrics.html" style="color:var(--accent)">Metrics</a> for definitions and weights.</p>
 </section>
+
+<section class="container">
+  <div class="section-head">
+    <span class="num">— ECOSYSTEM</span>
+    <h2>Routers in the ecosystem</h2>
+    <p>Real-world routers that select models or agents per request. Most are <strong>single-turn LLM routers</strong> — they pick the best model for each prompt. AgentRoute Arena benchmarks the gap they largely leave open: <strong>multi-turn, goal-based agentic routing</strong> (route by evolving goal, state, and capability across a trajectory). Notably, Not Diamond considers the sequence of past turns for coding-agent sessions — the closest existing system to agentic routing.</p>
+  </div>
+  <div class="table-wrap scroll" style="margin-bottom: var(--space-4)">
+    <table class="lb">
+      <thead><tr><th>Router</th><th>License</th><th>Best for</th><th>Standout routing feature</th></tr></thead>
+      <tbody>
+        <tr><td><a href="https://www.notdiamond.ai/" style="color:var(--accent)">Not Diamond</a></td><td>Closed-source (SaaS)</td><td>Intelligent routing for coding agents</td><td>Predicts the optimal model + reasoning effort per step, using payload semantics, KV-cache state, and the sequence of past turns to lower coding-agent spend</td></tr>
+        <tr><td><a href="https://kiro.dev/docs/models/available-models/" style="color:var(--accent)">AWS Kiro (Auto Mode)</a></td><td>Closed-source (managed)</td><td>Enterprise dev workflows & AWS ecosystems</td><td>Built-in cost-benefit router with multi-agent task breakdown</td></tr>
+        <tr><td><a href="https://github.com/jwadow/kiro-gateway" style="color:var(--accent)">Kiro Gateway</a></td><td>Open-source (AGPL-3.0)</td><td>Local proxy networks & restricted environments</td><td>Multi-account failover with a unified OpenAI/Anthropic stream proxy</td></tr>
+        <tr><td><a href="https://openrouter.ai/" style="color:var(--accent)">OpenRouter</a></td><td>Closed-source (SaaS)</td><td>Accessing 400+ hosted models seamlessly</td><td>Native "Auto" mode powered by the Not Diamond backend</td></tr>
+        <tr><td><a href="https://unify.ai/" style="color:var(--accent)">Unify</a></td><td>Closed-source (SaaS)</td><td>Balancing quality, cost & latency across providers</td><td>Learned neural scorer + live runtime benchmarks refreshed every 10 min, routing across 100+ providers</td></tr>
+        <tr><td><a href="https://withmartian.com/" style="color:var(--accent)">Martian</a></td><td>Closed-source (SaaS)</td><td>Real-time per-query model selection</td><td>Self-described "first LLM router"; routes each query to the best LLM in real time</td></tr>
+        <tr><td><a href="https://github.com/BerriAI/litellm" style="color:var(--accent)">LiteLLM</a></td><td>Open-source (MIT)</td><td>Self-hosted enterprise proxy architectures</td><td>Custom code-defined fallback, load balancing & cost controls</td></tr>
+        <tr><td><a href="https://routeworks.github.io/" style="color:var(--accent)">RouterArena</a></td><td>Open benchmark</td><td>Comparing single-turn LLM routers</td><td>The reference benchmark AgentRoute Arena extends from prompts to trajectories</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note"><span class="pill">Position:</span> Single-turn routers answer "which model for this prompt?" AgentRoute Arena answers "which agent, tool path, handoff, or clarification across this evolving goal?" — the multi-turn, goal-based complement to the systems above.</p>
+</section>
 </main>
 
 <footer class="site-footer">
   <div class="inner">
-    <span class="muted">AgentRoute Arena · an open benchmark for agentic routing · MIT License</span>
+    <span class="muted">AgentRoute Arena · an open benchmark for agentic routing · Apache-2.0</span>
     <div style="display:flex;gap:var(--space-5)"><a href="https://github.com/shantanugg/agentroutearena">GitHub</a><a href="benchmark.html">Benchmark</a><a href="about.html">About</a></div>
   </div>
 </footer>
