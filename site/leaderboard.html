@@ -52,7 +52,7 @@
   <div class="section-head">
     <span class="num">— ECOSYSTEM LEADERBOARD</span>
     <h2>Vendor routing capabilities</h2>
-    <p>A <strong>capability survey of real-world routers</strong> — not the AgentRoute Score benchmark. These are LLM gateway / model routers (failover, load-balancing, per-prompt model selection), not multi-turn agentic routers, so they can't be scored on the 51 trajectory scenarios. The two open-source vendors were <strong>independently tested in our sandbox</strong>; closed-source vendors show vendor-claimed capabilities from their docs. Full methodology: <a href="https://github.com/shantanugg/agentroutearena/blob/main/docs/vendor-testing.md" style="color:var(--accent)">docs/vendor-testing.md</a>.</p>
+    <p>A <strong>capability survey of real-world routers</strong> — not the AgentRoute Score benchmark. These are LLM gateway / model routers (failover, load-balancing, per-prompt model selection), not multi-turn agentic routers, so they can't be scored on the 51 trajectory scenarios. The two open-source vendors were <strong>independently tested in our sandbox</strong>; closed-source vendors show vendor-claimed capabilities from their docs. Full methodology: <a href="https://github.com/balasambamurhty/agentrouterarena/blob/main/docs/vendor-testing.md" style="color:var(--accent)">docs/vendor-testing.md</a>.</p>
   </div>
 
   <div class="eco-legend">
@@ -90,7 +90,7 @@
         <li><strong>Retry-then-fallback</strong>: with <code>num_retries=2</code>, retried primary then fell back ✓</li>
         <li>Latency- &amp; cost-based routing run but need real usage data to be meaningful (not exercised with mocks)</li>
       </ul>
-      <p class="verdict"><span class="tag pass">PASS</span> &nbsp; Agentic fit: none — routes between model <em>deployments</em>, not across an evolving goal. <a href="https://github.com/shantanugg/agentroutearena/blob/main/benchmark/vendors/test_litellm_router.py" style="color:var(--accent)">test script →</a></p>
+      <p class="verdict"><span class="tag pass">PASS</span> &nbsp; Agentic fit: none — routes between model <em>deployments</em>, not across an evolving goal. <a href="https://github.com/balasambamurhty/agentrouterarena/blob/main/benchmark/vendors/test_litellm_router.py" style="color:var(--accent)">test script →</a></p>
     </div>
     <div class="test-card">
       <div class="tc-head"><h4>Kiro Gateway</h4><span class="meta">AGPL-3.0 · FastAPI</span></div>
@@ -109,7 +109,7 @@
 <footer class="site-footer">
   <div class="inner">
     <span class="muted">AgentRoute Arena · an open benchmark for agentic routing · Apache-2.0</span>
-    <div style="display:flex;gap:var(--space-5)"><a href="https://github.com/shantanugg/agentroutearena">GitHub</a><a href="benchmark.html">Benchmark</a><a href="about.html">About</a></div>
+    <div style="display:flex;gap:var(--space-5)"><a href="https://github.com/balasambamurhty/agentrouterarena">GitHub</a><a href="benchmark.html">Benchmark</a><a href="about.html">About</a></div>
   </div>
 </footer>
 <script>
